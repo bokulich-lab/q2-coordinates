@@ -34,19 +34,12 @@ def map_predicted_coordinates(output_dir: str,
 
     # Load metadata, attempt to convert to numeric
     metadata = metadata_to_df(metadata)
-    predictions = predictions.apply(
-        lambda x: pd.to_numeric(x, errors='ignore'))
 
     # set up basemap
     ax, cmap = plot_basemap(predictions[pred_lat].append(metadata[latitude]),
                             predictions[pred_long].append(metadata[longitude]),
                             image)
 
-    print(metadata[longitude])
-    print(predictions[pred_long])
-    print(metadata[latitude])
-    print(predictions[pred_lat])
-    print(type(metadata[longitude]), type(predictions[pred_long]))
     # plot all actual coordinates
     plt.plot(metadata[longitude], metadata[latitude], 'o', color='black',
              transform=ccrs.Geodetic())
