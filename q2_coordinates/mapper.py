@@ -50,7 +50,7 @@ def map_predicted_coordinates(output_dir: str,
              transform=ccrs.Geodetic())
 
     # plot predicted coordinates
-    plt.plot(predictions[pred_lat], predictions[pred_long], 'o', color='r',
+    plt.plot(predictions[pred_long], predictions[pred_lat], 'o', color='r',
              alpha=0.8, transform=ccrs.Geodetic())
     ax.legend(
         ['training set', 'actual', 'predicted'], bbox_to_anchor=(1.05, 1))
