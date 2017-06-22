@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.colors as mcolors
 import qiime2
-from q2_sample_classifier.utilities import metadata_to_df
+from q2_sample_classifier.utilities import _metadata_to_df
 
 from ._utilities import (get_map_params, get_max_extent, plot_basemap,
                          save_map, mapviz)
@@ -33,7 +33,7 @@ def map_predicted_coordinates(output_dir: str,
                               image: str='StamenTerrain'):
 
     # Load metadata, attempt to convert to numeric
-    metadata = metadata_to_df(metadata)
+    metadata = _metadata_to_df(metadata)
 
     # set up basemap
     ax, cmap = plot_basemap(predictions[pred_lat].append(metadata[latitude]),
@@ -70,7 +70,7 @@ def map_metadata_coordinates(output_dir: str,
                              discrete: bool=False):
 
     # Load metadata, attempt to convert to numeric
-    metadata = metadata_to_df(metadata)
+    metadata = _metadata_to_df(metadata)
     alpha_diversity = alpha_diversity.convert_objects(convert_numeric=True)
 
     # set up basemap
