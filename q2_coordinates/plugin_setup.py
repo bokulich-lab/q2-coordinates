@@ -26,6 +26,62 @@ plugin = Plugin(
 )
 
 
+Coordinates = SemanticType('Coordinates', variant_of=SampleData.field['type'])
+
+
+class CoordinatesFormat(model.TextFileFormat):
+    def sniff(self):
+        with self.open() as fh:
+            for line, _ in zip(fh, range(10)):
+                cells = line.split('\t')
+                if len(cells) < 2:
+                    return False
+            return True
+
+
+CoordinatesDirectoryFormat = model.SingleFileDirectoryFormat(
+    'CoordinatesDirectoryFormat', 'coordinates.tsv',
+    CoordinatesFormat)
+
+
+def _read_dataframe(fh):
+    # Using `dtype=object` and `set_index` to avoid type casting/inference
+    # of any columns or the index.
+    df = pd.read_csv(fh, sep='\t', header=0, dtype=object)
+    df.set_index(df.columns[0], drop=True, append=False, inplace=True)
+    df.index.name = None
+    return df
+
+
+@plugin.register_transformer
+def _1(data: pd.DataFrame) -> (CoordinatesFormat):
+    ff = CoordinatesFormat()
+    with ff.open() as fh:
+        data.to_csv(fh, sep='\t', header=True)
+    return ff
+
+
+@plugin.register_transformer
+def _2(ff: CoordinatesFormat) -> (pd.DataFrame):
+    with ff.open() as fh:
+        df = _read_dataframe(fh)
+        return df.apply(lambda x: pd.to_numeric(x, errors='ignore'))
+
+
+@plugin.register_transformer
+def _3(ff: CoordinatesFormat) -> (qiime2.Metadata):
+    with ff.open() as fh:
+        return qiime2.Metadata(_read_dataframe(fh))
+
+
+plugin.register_formats(CoordinatesFormat, CoordinatesDirectoryFormat)
+
+plugin.register_semantic_types(Coordinates, BooleanSeries)
+
+plugin.register_semantic_type_to_format(
+    SampleData[Coordinates],
+    artifact_format=CoordinatesDirectoryFormat)
+
 base_parameters={
     'metadata': Metadata,
     'latitude': Str,
