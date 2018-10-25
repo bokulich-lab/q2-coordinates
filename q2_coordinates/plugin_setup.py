@@ -10,7 +10,7 @@
 
 
 from qiime2.plugin import Str, Plugin, Metadata, Choices, Bool
-from .mapper import map_metadata_coordinates, map_predicted_coordinates
+from .mapper import map_metadata_coordinates
 import q2_coordinates
 import importlib
 from q2_types.sample_data import AlphaDiversity, SampleData
@@ -131,37 +131,4 @@ plugin.visualizers.register_function(
         'https://matplotlib.org/examples/color/colormaps_reference.html. '
         'Use qualitative colormaps with maximal contrast against map '
         'background, such as "Set1", "Accent", "Paired", "Dark2", or "tab10".')
-)
-
-
-plugin.visualizers.register_function(
-    function=map_predicted_coordinates,
-    inputs={'predictions': SampleData[Coordinates],
-            'prediction_regression': SampleData[Coordinates],
-    },
-    parameters={**base_parameters,
-                'pred_lat': Str,
-                'pred_long': Str,
-                },
-    input_descriptions={
-        'predictions': 'Predicted geospatial coordinates for each sample.',
-        'prediction_regression': (
-            'Prediction regression results for each coordinate.'),
-    },
-    parameter_descriptions={
-        **base_parameter_descriptions,
-        'pred_lat': ('Name of category in predictions input containing '
-                     'predicted latitude in decimal degrees.'),
-        'pred_long': ('Name of category in predictions input containing '
-                     'predicted longitude in decimal degrees.'),
-    },
-    name='Plot predicted and actual geocoordinates on a map.',
-    description=(
-        'Plots predicted and actual sample geocoordinates onto a map image, '
-        'e.g., the output of q2-sample-classifier visualizer '
-        'predict_coordinates. The input metadata map must contain the '
-        'categories "latitude", and "longitude" for each sample. The input '
-        '"predictions" artifact must contain the categories "pred_lat", and '
-        '"pred_long" for each sample. Sample points are colored by expected '
-        'vs. predicted values.')
 )
