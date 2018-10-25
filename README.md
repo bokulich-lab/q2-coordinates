@@ -26,15 +26,3 @@ We can use the same visualizer action for plotting alpha diversity values to col
 qiime coordinates map-metadata-coordinates --i-alpha-diversity alpha_diversity.qza --m-metadata-file chardonnay.map.txt --p-category vineyard --p-latitude latitude --p-longitude longitude --o-visualization vineyard-map --p-discrete
 ```
 ![Alt text](./examples/vineyard-map.jpg?raw=true "coordinates colored by metadata values")
-
-## Plotting predicted vs. expected geocoordinates
-q2-sample-classifier predict-coordinates allows us to predict two continuous variables on a single set of test data, allowing us to determine how well microbial composition predicts geographical source. This method generates a list of predicted latitude and longitude coordinates for each sample, contained in the 'predictions' artifact. The 'accuracy' artifact contains accuracy scores for each coordinate, and 'prediction-regression' contains linear regression results for predicted vs. actual coordinates.
-
-```
-qiime sample-classifier predict-coordinates --i-table chardonnay.table.qza --m-metadata-file chardonnay.map.txt --p-latitude latitude --p-longitude longitude --p-n-jobs 4 --o-predictions coord-predictions --o-prediction-regression coord-regression
-```
-This is where q2-coordinates comes in. We can pass these results to the visualizer map-predicted-coordinates to visualize these results, mapping actual and predicted coordinates for each sample onto a map.
-```
-qiime coordinates map-predicted-coordinates --i-predictions coord-predictions.qza --i-prediction-regression coord-regression.qza --m-metadata-file chardonnay.map.txt --p-latitude latitude --p-longitude longitude --p-pred-lat latitude --p-pred-long longitude --o-visualization prediction-map
-```
-![Alt text](./examples/predicted-coordinates.jpg?raw=true "predicted and observed coordinates")

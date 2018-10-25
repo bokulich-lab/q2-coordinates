@@ -22,43 +22,6 @@ from ._utilities import (get_map_params, get_max_extent, plot_basemap,
                          save_map, mapviz)
 
 
-def map_predicted_coordinates(output_dir: str,
-                              predictions: pd.DataFrame,
-                              prediction_regression: pd.DataFrame,
-                              metadata: qiime2.Metadata,
-                              latitude: str='Latitude',
-                              longitude: str='Longitude',
-                              pred_lat: str='Latitude',
-                              pred_long: str='Longitude',
-                              image: str='StamenTerrain'):
-
-    # Load metadata, attempt to convert to numeric
-    metadata = _metadata_to_df(metadata)
-
-    # set up basemap
-    ax, cmap = plot_basemap(predictions[pred_lat].append(metadata[latitude]),
-                            predictions[pred_long].append(metadata[longitude]),
-                            image)
-
-    # plot all actual coordinates
-    plt.plot(metadata[longitude], metadata[latitude], 'o', color='black',
-             transform=ccrs.Geodetic())
-
-    # plot actual test coordinates
-    metadata = metadata.loc[predictions.index]
-    plt.plot(metadata[longitude], metadata[latitude], 'o', color='b',
-             transform=ccrs.Geodetic())
-
-    # plot predicted coordinates
-    plt.plot(predictions[pred_long], predictions[pred_lat], 'o', color='r',
-             alpha=0.8, transform=ccrs.Geodetic())
-    ax.legend(
-        ['training set', 'actual', 'predicted'], bbox_to_anchor=(1.05, 1))
-
-    save_map(ax, output_dir)
-    mapviz(output_dir, prediction_regression)
-
-
 def map_metadata_coordinates(output_dir: str,
                              alpha_diversity: pd.Series,
                              metadata: qiime2.Metadata,
