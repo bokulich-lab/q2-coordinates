@@ -13,16 +13,32 @@ Map projections are quick for small maps, but may take several minutes for very 
 ## Plotting geocoordinates colored by alpha diversity values
 This visualizer takes a SampleData[AlphaDiversity] artifact and sample metadata TSV as input, and plots sample coordinates on the built-in maps. Sample points are colored as a function of alpha diversity values.
 ```
-cd ~/Desktop/projects/q2-coordinates/q2_coordinates/test_data/
+cd q2-coordinates/q2_coordinates/tests/data/
 
-qiime diversity alpha --i-table even_table.qza --p-metric observed_otus --o-alpha-diversity alpha_diversity
-qiime coordinates map-metadata-coordinates --i-alpha-diversity alpha_diversity.qza --m-metadata-file chardonnay.map.txt --p-latitude latitude --p-longitude longitude --o-visualization diversity-map
+qiime diversity alpha \
+    --i-table even_table.qza \
+    --p-metric observed_otus \
+    --o-alpha-diversity alpha_diversity1
+
+qiime coordinates draw-map \
+    --m-metadata-file alpha_diversity.qza \
+    --m-metadata-file chardonnay.map.txt \
+    --p-latitude latitude \
+    --p-longitude longitude \
+    --p-column observed_otus \
+    --o-visualization diversity-map
 ```
 ![Alt text](./examples/alpha-diversity.jpg?raw=true "coordinates colored by observed species")
 
 ## Plotting geocoordinates colored by metadata category values
 We can use the same visualizer action for plotting alpha diversity values to color sample points as a function of continuous or categorical sample metadata. To do this, we simply add the "category" parameter to use that category from the sample metadata instead of alpha diversity values (which must still be input for the time being, until qiime2 permits optional artifacts). The plot below shows the various vineyard sites (indicated by anonymous numbers) where samples were collected.
 ```
-qiime coordinates map-metadata-coordinates --i-alpha-diversity alpha_diversity.qza --m-metadata-file chardonnay.map.txt --p-category vineyard --p-latitude latitude --p-longitude longitude --o-visualization vineyard-map --p-discrete
+qiime coordinates draw-map \
+    --m-metadata-file chardonnay.map.txt \
+    --p-column vineyard \
+    --p-latitude latitude \
+    --p-longitude longitude \
+    --p-discrete \
+    --o-visualization vineyard-map
 ```
 ![Alt text](./examples/vineyard-map.jpg?raw=true "coordinates colored by metadata values")

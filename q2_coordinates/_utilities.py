@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # ----------------------------------------------------------------------------
-# Copyright (c) 2017--, q2-coordinates development team.
+# Copyright (c) 2017--, QIIME 2 development team.
 #
 # Distributed under the terms of the Lesser GPL 3.0 licence.
 #
@@ -13,11 +13,9 @@ import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 from cartopy.io.img_tiles import StamenTerrain, OSM, GoogleTiles
 import math
-import matplotlib.colors as mcolors
 from os.path import join
 import pkg_resources
 import q2templates
-import pandas as pd
 
 
 TEMPLATES = pkg_resources.resource_filename('q2_coordinates', 'assets')
@@ -88,7 +86,6 @@ def mapviz(output_dir, prediction_regression=None):
                 'border="1"', 'border="0"')
     else:
         prediction_regression_ = False
-
 
     index = join(TEMPLATES, 'index.html')
     q2templates.render(index, output_dir, context={

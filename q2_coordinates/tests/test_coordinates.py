@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# Copyright (c) 2017--, q2-coordinates development team.
+# Copyright (c) 2017--, QIIME 2 development team.
 #
 # Distributed under the terms of the Lesser GPL 3.0 licence.
 #
@@ -14,6 +14,8 @@ import shutil
 import pkg_resources
 from qiime2.plugin.testing import TestPluginBase
 from qiime2.plugin import ValidationError
+import pandas as pd
+import qiime2
 
 
 class CoordinatesTestPluginBase(TestPluginBase):
@@ -32,7 +34,7 @@ class CoordinatesTestPluginBase(TestPluginBase):
                                                'data/%s' % filename)
 
 
-class TestSemanticTypes(SampleClassifierTestPluginBase):
+class TestSemanticTypes(CoordinatesTestPluginBase):
 
     def test_coordinates_format_validate_positive(self):
         filepath = self.get_data_path('coordinates.tsv')
@@ -63,7 +65,7 @@ class TestSemanticTypes(SampleClassifierTestPluginBase):
         exp = pd.DataFrame(
             {'Latitude': (38.306, 38.306), 'Longitude': (-122.228, -122.228)})
         obs = transformer(exp)
-        obs = pd.DataFrame.from_csv(str(obs), sep='\t', header=0)
+        obs = pd.read_csv(str(obs), sep='\t', header=0, index_col=0)
         self.assertEqual(sorted(exp), sorted(obs))
 
     def test_coordinates_format_to_pd_dataframe(self):
@@ -78,7 +80,7 @@ class TestSemanticTypes(SampleClassifierTestPluginBase):
     def test_coordinates_format_to_metadata(self):
         _, obs = self.transform_format(
             CoordinatesFormat, qiime2.Metadata, 'coordinates.tsv')
-        obs_category = obs.get_category('Latitude')
+        obs_category = obs.get_column('Latitude')
         exp_index = pd.Index(['a', 'b', 'c', 'd'], dtype=object)
         exp = pd.Series(['38.306', '38.306', '38.306', '38.306'],
                         name='Latitude', index=exp_index)
