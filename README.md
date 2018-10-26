@@ -10,6 +10,8 @@ Currently, StamenTerrain, Open Street Maps, and Google Maps are supported, produ
 Map projections are quick for small maps, but may take several minutes for very large maps (e.g., trans-continental).
 
 # Examples
+In the examples below we will use some bacterial 16S rRNA gene amplicon sequence data collected from Californian vineyards, as described by [Bokulich et al. 2016](https://doi.org/10.1128/mBio.00631-16). 😎🍷
+
 ## Plotting geocoordinates colored by alpha diversity values
 This visualizer takes a SampleData[AlphaDiversity] artifact and sample metadata TSV as input, and plots sample coordinates on the built-in maps. Sample points are colored as a function of alpha diversity values.
 ```
@@ -28,7 +30,12 @@ qiime coordinates draw-map \
     --p-column observed_otus \
     --o-visualization diversity-map
 ```
+
 ![Alt text](./examples/alpha-diversity.jpg?raw=true "coordinates colored by observed species")
+
+Note that _any_ metadata-transformable artifacts can be used as a `metadata-file` input to this command, so this opens the door to many other data types, e.g., PCoA results, predictions, etc.
+
+HINT: If you are not sure what the `column` name is for your artifact of interest, use `qiime metadata tabulate` to view as a dataframe.
 
 ## Plotting geocoordinates colored by metadata category values
 We can use the same visualizer action for plotting alpha diversity values to color sample points as a function of continuous or categorical sample metadata. To do this, we simply add the "category" parameter to use that category from the sample metadata instead of alpha diversity values (which must still be input for the time being, until qiime2 permits optional artifacts). The plot below shows the various vineyard sites (indicated by anonymous numbers) where samples were collected.
@@ -42,3 +49,22 @@ qiime coordinates draw-map \
     --o-visualization vineyard-map
 ```
 ![Alt text](./examples/vineyard-map.jpg?raw=true "coordinates colored by metadata values")
+
+## Converting geocoordinates to a distance matrix
+This is a cinch with q2-coordinates! Just use the `distance-matrix` method:
+```
+qiime coordinates distance-matrix \
+    --m-metadata-file chardonnay.map.txt \
+    --p-latitude latitude \
+    --p-longitude longitude \
+    --o-distance-matrix dm.qza
+```
+
+We can use this for other useful QIIME 2 methods, e.g., to compute a mantel test comparing two different distance matrices. E.g., we can compare Bray-Curtis dissimilarities between microbial communities to geospatial distances between our vineyard samples:
+```
+qiime diversity mantel \
+    --i-dm1 dm.qza \
+    --i-dm2 distance.qza \
+    --p-intersect-ids \
+    --o-visualization mantel.qzv
+```
