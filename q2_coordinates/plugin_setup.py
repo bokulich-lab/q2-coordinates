@@ -89,6 +89,7 @@ plugin.methods.register_function(
     parameter_descriptions=base_parameter_descriptions,
     name='Create a distance matrix from sample geocoordinates.',
     description='Measure pairwise geodesic distances between coordinates. '
+                'Output distances are reported in meters. '
                 'Note that samples with missing values are silently dropped.',
     citations=[citations['Karney2013']]
 )
