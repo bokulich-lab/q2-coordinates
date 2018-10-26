@@ -16,7 +16,34 @@ import numpy as np
 import matplotlib.colors as mcolors
 import qiime2
 
-from ._utilities import (plot_basemap, save_map, mapviz)
+from skbio import DistanceMatrix
+from geopy import distance, Point
+
+from ._utilities import (plot_basemap,
+                         save_map,
+                         mapviz,
+                         _load_and_validate,
+                         _validate_columns)
+
+
+def distance_matrix(metadata: qiime2.Metadata,
+                    latitude: str='Latitude',
+                    longitude: str='Longitude') -> DistanceMatrix:
+
+    sample_md = _load_and_validate(
+        metadata, [latitude, longitude], ['latitude', 'longitude'])
+
+    # Collect geocoordinate points
+    points = [Point(x) for x in zip(sample_md[latitude], sample_md[longitude])]
+
+    # Compute pairwise distances between all points
+    def distance_function(a, b):
+        return distance.geodesic(a, b).meters
+
+    dm = DistanceMatrix.from_iterable(
+        points, metric=distance_function, keys=sample_md.index)
+
+    return dm
 
 
 def draw_map(output_dir: str,
@@ -28,23 +55,13 @@ def draw_map(output_dir: str,
              color_palette: str='rainbow',
              discrete: bool=False):
 
-    # Load metadata
-    metadata = metadata.to_dataframe()
+    metadata = _load_and_validate(
+        metadata, [column, latitude, longitude],
+        ['column', 'latitude', 'longitude'])
 
     # set up basemap
     ax, cmap = plot_basemap(
         metadata[latitude], metadata[longitude], image, color_palette)
-
-    # validate sample metadata columns
-    cs = [(column, 'column'), (latitude, 'latitude'), (longitude, 'longitude')]
-    for c, name in cs:
-        if c in metadata:
-            pass
-        else:
-            raise ValueError(
-                'Must define a valid "{0}" column to use for sample mapping. '
-                '"{1}" is not a valid column name in your sample metadata '
-                'file.'.format(name, c))
 
     # plot coordinates on map. If column is numeric, color points by column
     if np.issubdtype(metadata[column].dtype, np.number) and not discrete:

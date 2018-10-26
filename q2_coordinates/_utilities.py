@@ -21,6 +21,28 @@ import q2templates
 TEMPLATES = pkg_resources.resource_filename('q2_coordinates', 'assets')
 
 
+def _load_and_validate(metadata, columns, names):
+    # load and drop empty data
+    metadata = metadata.to_dataframe()
+    metadata = metadata[columns].dropna()
+
+    # validate inputs
+    _validate_columns(metadata, columns, names)
+
+    return metadata
+
+
+def _validate_columns(metadata, columns, names):
+    for c, name in zip(columns, names):
+        if c in metadata:
+            pass
+        else:
+            raise ValueError(
+                'Must define a valid "{0}" column to use for sample mapping. '
+                '"{1}" is not a valid column name in your sample metadata '
+                'file.'.format(name, c))
+
+
 def get_map_params(image='StamenTerrain', color_palette=None):
     # set color palette
     if color_palette:

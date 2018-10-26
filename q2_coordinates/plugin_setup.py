@@ -10,10 +10,11 @@
 
 
 from qiime2.plugin import Str, Plugin, Metadata, Choices, Bool, Citations
-from .mapper import draw_map
+from .mapper import draw_map, distance_matrix
 import q2_coordinates
 import importlib
 from q2_types.sample_data import SampleData
+from q2_types.distance_matrix import DistanceMatrix
 from ._format import (CoordinatesFormat, CoordinatesDirectoryFormat)
 from ._type import (Coordinates)
 
@@ -37,14 +38,12 @@ base_parameters = {
     'metadata': Metadata,
     'latitude': Str,
     'longitude': Str,
-    'image': Str % Choices(['StamenTerrain', 'OSM', 'GoogleTiles']),
 }
 
 base_parameter_descriptions = {
     'metadata': 'The sample metadata containing latitude and longitude data.',
     'latitude': 'Metadata column containing latitude in decimal degrees.',
     'longitude': 'Metadata column containing longitude in decimal degrees.',
-    'image': 'Base map image to use for coordinate projection.',
 }
 
 
@@ -53,8 +52,14 @@ plugin.visualizers.register_function(
     inputs={},
     parameters={**base_parameters,
                 'column': Str,
-                'color_palette': Str,
+                'color_palette': Str % Choices([
+                    'Set1', 'Set2', 'Set3', 'Pastel1', 'Pastel2', 'Paired',
+                    'Accent', 'Dark2', 'tab10', 'tab20', 'tab20b', 'tab20c',
+                    'viridis', 'plasma', 'inferno', 'magma', 'terrain',
+                    'rainbow']),
                 'discrete': Bool,
+                'image': Str % Choices(
+                    ['StamenTerrain', 'OSM', 'GoogleTiles']),
                 },
     input_descriptions={},
     parameter_descriptions={
@@ -64,23 +69,28 @@ plugin.visualizers.register_function(
                    'coloring.'),
         'color_palette': (
             'Color palette to use for coloring sample points on map.'),
-        'discrete': 'Plot continuous column data as discrete values.'
+        'discrete': 'Plot continuous column data as discrete values.',
+        'image': 'Base map image to use for coordinate projection.',
     },
     name='Plot sampling site geocoordinates on a map.',
     description=(
-        'Plots sample geocoordinates onto a map image. The input metadata'
-        'map should contain the categories "column", "latitude", and '
-        '"longitude" for each sample. Sample points are colored by the '
-        'column name "column", which may be categorical or continuous, and '
-        'may be located in the sample metadata or in the AlphaDiversity '
-        'artifact (until optional artifact inputs are supported, the latter '
-        'is a required input whether or not you wish to categorize by alpha '
-        'diversity). For a list of available color palettes, see '
-        'https://matplotlib.org/examples/color/colormaps_reference.html. '
-        'Use qualitative colormaps with maximal contrast against map '
-        'background, such as "Set1", "Accent", "Paired", "Dark2", or "tab10".')
+        'Plots sample geocoordinates onto a map image. Sample points are '
+        'colored by the column name "column", which may be categorical or '
+        'numeric.'),
+    citations=[citations['Cartopy']]
 )
 
+plugin.methods.register_function(
+    function=distance_matrix,
+    inputs={},
+    parameters=base_parameters,
+    outputs=[('distance_matrix', DistanceMatrix)],
+    input_descriptions={},
+    parameter_descriptions=base_parameter_descriptions,
+    name='Create a distance matrix from sample geocoordinates.',
+    description='Measure pairwise geodesic distances between coordinates.',
+    citations=[citations['Karney2013']]
+)
 
 # Registrations
 plugin.register_formats(CoordinatesFormat, CoordinatesDirectoryFormat)

@@ -10,6 +10,8 @@ from .test_coordinates import CoordinatesTestPluginBase
 from qiime2.plugins import coordinates
 import qiime2
 import pandas as pd
+import numpy as np
+from skbio import DistanceMatrix
 
 
 # these tests make sure the actions run and accept appropriate inputs
@@ -33,3 +35,10 @@ class TestMapper(CoordinatesTestPluginBase):
         coordinates.actions.draw_map(
             metadata=self.sample_md, latitude='latitude',
             longitude='longitude', column='vineyard', discrete=True)
+
+    def test_distance_matrix_geodesic(self):
+        dm, = coordinates.actions.distance_matrix(
+            metadata=self.sample_md, latitude='latitude',
+            longitude='longitude')
+        exp = qiime2.Artifact.load(self.get_data_path('dm.qza'))
+        self.assertTrue(dm.view(DistanceMatrix) == exp.view(DistanceMatrix))
