@@ -60,6 +60,8 @@ qiime coordinates distance-matrix \
     --o-distance-matrix dm.qza
 ```
 
+This computes geodesic distance (in meters) between each point. Note that samples with missing values are ignored.
+
 We can use this for other useful QIIME 2 methods, e.g., to compute a mantel test comparing two different distance matrices. E.g., we can compare Bray-Curtis dissimilarities between microbial communities to geospatial distances between our vineyard samples:
 ```
 qiime diversity mantel \

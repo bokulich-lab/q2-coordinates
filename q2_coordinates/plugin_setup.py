@@ -73,10 +73,10 @@ plugin.visualizers.register_function(
         'image': 'Base map image to use for coordinate projection.',
     },
     name='Plot sampling site geocoordinates on a map.',
-    description=(
+    description=
         'Plots sample geocoordinates onto a map image. Sample points are '
         'colored by the column name "column", which may be categorical or '
-        'numeric.'),
+        'numeric. Note that samples with missing values are silently dropped.',
     citations=[citations['Cartopy']]
 )
 
@@ -88,7 +88,8 @@ plugin.methods.register_function(
     input_descriptions={},
     parameter_descriptions=base_parameter_descriptions,
     name='Create a distance matrix from sample geocoordinates.',
-    description='Measure pairwise geodesic distances between coordinates.',
+    description='Measure pairwise geodesic distances between coordinates. '
+                'Note that samples with missing values are silently dropped.',
     citations=[citations['Karney2013']]
 )
 
