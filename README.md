@@ -50,10 +50,10 @@ qiime coordinates draw-map \
 ```
 ![Alt text](./examples/vineyard-map.jpg?raw=true "coordinates colored by metadata values")
 
-## Converting geocoordinates to a distance matrix
-This is a cinch with q2-coordinates! Just use the `distance-matrix` method:
+## Converting (geo)coordinates to a distance matrix
+This is a cinch with q2-coordinates! To calculate geodesic distance from geocoordinate data, use the `geodesic-distance` method:
 ```
-qiime coordinates distance-matrix \
+qiime coordinates geodesic-distance \
     --m-metadata-file chardonnay.map.txt \
     --p-latitude latitude \
     --p-longitude longitude \
@@ -62,7 +62,17 @@ qiime coordinates distance-matrix \
 
 This computes geodesic distance (in meters) between each point. Note that samples with missing values are ignored.
 
-We can use this for other useful QIIME 2 methods, e.g., to compute a mantel test comparing two different distance matrices. E.g., we can compare Bray-Curtis dissimilarities between microbial communities to geospatial distances between our vineyard samples:
+We can also construct a distance matrix from 2D or 3D spatial coordinates using the `euclidean-distance` method:
+```
+qiime coordinates euclidean-distance \
+    --m-metadata-file xyz-coordinates.tsv \
+    --p-x x \
+    --p-y y \
+    --p-z z \
+    --o-distance-matrix xyz-dm.qza
+```
+
+We can use these distance matrices for other useful QIIME 2 methods, e.g., to compute a mantel test comparing two different distance matrices. For example, we can compare Bray-Curtis dissimilarities between microbial communities to geospatial distances between our vineyard samples:
 ```
 qiime diversity mantel \
     --i-dm1 dm.qza \

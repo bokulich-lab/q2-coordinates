@@ -15,6 +15,7 @@ import matplotlib.cm as cm
 import numpy as np
 import matplotlib.colors as mcolors
 import qiime2
+import scipy
 
 from skbio import DistanceMatrix
 from geopy import distance, Point
@@ -26,9 +27,9 @@ from ._utilities import (plot_basemap,
                          _validate_columns)
 
 
-def distance_matrix(metadata: qiime2.Metadata,
-                    latitude: str='Latitude',
-                    longitude: str='Longitude') -> DistanceMatrix:
+def geodesic_distance(metadata: qiime2.Metadata,
+                      latitude: str='Latitude',
+                      longitude: str='Longitude') -> DistanceMatrix:
 
     sample_md = _load_and_validate(
         metadata, [latitude, longitude], ['latitude', 'longitude'])
@@ -42,6 +43,28 @@ def distance_matrix(metadata: qiime2.Metadata,
 
     dm = DistanceMatrix.from_iterable(
         points, metric=distance_function, keys=sample_md.index)
+
+    return dm
+
+
+def euclidean_distance(metadata: qiime2.Metadata,
+                       x: str,
+                       y: str,
+                       z: str=None) -> DistanceMatrix:
+
+    cols = [x, y]
+    names = ['x', 'y']
+    if z is not None:
+        cols.append(z)
+        names.append('z')
+
+    sample_md = _load_and_validate(metadata, cols, names)
+
+    # Compute pairwise distances between all points
+    distances = scipy.spatial.distance.pdist(
+        sample_md.values, metric='euclidean')
+
+    dm = DistanceMatrix(distances, ids=sample_md.index)
 
     return dm
 

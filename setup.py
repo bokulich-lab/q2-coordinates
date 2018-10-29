@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # ----------------------------------------------------------------------------
-# Copyright (c) 2017--, q2-coordinates development team.
+# Copyright (c) 2017--, QIIME 2 development team.
 #
 # Distributed under the terms of the Lesser GPL 3.0 licence.
 #
@@ -16,7 +16,7 @@ setup(
     license='LGPL-3.0',
     packages=find_packages(),
     install_requires=['biom-format', 'pandas', 'scipy', 'cartopy', 'numpy',
-                      'geopy'],
+                      'geopy', 'pysal'],
     author="Nicholas Bokulich",
     author_email="nbokulich@gmail.com",
     description=("Methods for geographic mapping of qiime2 artifact data or"

@@ -10,7 +10,7 @@
 
 
 from qiime2.plugin import Str, Plugin, Metadata, Choices, Bool, Citations
-from .mapper import draw_map, distance_matrix
+from .mapper import draw_map, geodesic_distance, euclidean_distance
 import q2_coordinates
 import importlib
 from q2_types.sample_data import SampleData
@@ -81,7 +81,7 @@ plugin.visualizers.register_function(
 )
 
 plugin.methods.register_function(
-    function=distance_matrix,
+    function=geodesic_distance,
     inputs={},
     parameters=base_parameters,
     outputs=[('distance_matrix', DistanceMatrix)],
@@ -92,6 +92,26 @@ plugin.methods.register_function(
                 'Output distances are reported in meters. '
                 'Note that samples with missing values are silently dropped.',
     citations=[citations['Karney2013']]
+)
+
+plugin.methods.register_function(
+    function=euclidean_distance,
+    inputs={},
+    parameters={'metadata': base_parameters['metadata'],
+                'x': Str,
+                'y': Str,
+                'z': Str},
+    outputs=[('distance_matrix', DistanceMatrix)],
+    input_descriptions={},
+    parameter_descriptions={
+        'metadata': base_parameter_descriptions['metadata'],
+        'x': 'x-axis coordinate in cartesian space.',
+        'y': 'y-axis coordinate in cartesian space.',
+        'z': 'z-axis coordinate in cartesian space.'},
+    name='Create a distance matrix from 2D or 3D cartesian coordinates.',
+    description='Measure pairwise euclidean distances between cartesian '
+                'coordinates. '
+                'Note that samples with missing values are silently dropped.',
 )
 
 # Registrations
