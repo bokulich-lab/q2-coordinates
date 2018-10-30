@@ -92,25 +92,21 @@ def plot_basemap(latitude, longitude, image, color_palette=None):
 
 def save_map(ax, output_dir):
     ax.get_figure().savefig(
-        join(output_dir, 'geoaxes.png'), bbox_inches='tight')
+        join(output_dir, 'plot.png'), bbox_inches='tight')
     ax.get_figure().savefig(
-        join(output_dir, 'geoaxes.pdf'), bbox_inches='tight')
+        join(output_dir, 'plot.pdf'), bbox_inches='tight')
     plt.close('all')
 
 
-def mapviz(output_dir, prediction_regression=None):
-    if prediction_regression is not None:
-        prediction_regression_ = True
-        prediction_regression.to_csv(join(
-            output_dir, 'prediction_regression.tsv'), sep='\t')
-        prediction_regression = prediction_regression.to_html(
-            classes=("table table-striped table-hover")).replace(
-                'border="1"', 'border="0"')
+def mapviz(output_dir, results=None, title='Coordinates'):
+    if results is not None:
+        results.to_csv(join(
+            output_dir, 'results.tsv'), sep='\t', index=True)
+        results = q2templates.df_to_html(results)
     else:
-        prediction_regression_ = False
+        results = False
 
     index = join(TEMPLATES, 'index.html')
     q2templates.render(index, output_dir, context={
-        'prediction_regression': prediction_regression,
-        'prediction_regression_': prediction_regression_
-    })
+        'results': results,
+        'title': title})

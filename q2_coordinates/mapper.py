@@ -23,8 +23,7 @@ from geopy import distance, Point
 from ._utilities import (plot_basemap,
                          save_map,
                          mapviz,
-                         _load_and_validate,
-                         _validate_columns)
+                         _load_and_validate)
 
 
 def geodesic_distance(metadata: qiime2.Metadata,

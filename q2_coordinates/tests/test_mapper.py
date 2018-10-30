@@ -9,7 +9,6 @@
 from .test_coordinates import CoordinatesTestPluginBase
 from qiime2.plugins import coordinates
 import qiime2
-import pandas as pd
 import numpy as np
 from skbio import DistanceMatrix
 

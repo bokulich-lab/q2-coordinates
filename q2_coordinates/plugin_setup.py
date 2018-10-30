@@ -9,7 +9,8 @@
 # ----------------------------------------------------------------------------
 
 
-from qiime2.plugin import Str, Plugin, Metadata, Choices, Bool, Citations
+from qiime2.plugin import (Str, Plugin, Metadata, Choices, Bool, Citations,
+                           Int, MetadataColumn, Numeric, Range)
 from .mapper import draw_map, geodesic_distance, euclidean_distance
 import q2_coordinates
 import importlib
@@ -17,6 +18,7 @@ from q2_types.sample_data import SampleData
 from q2_types.distance_matrix import DistanceMatrix
 from ._format import (CoordinatesFormat, CoordinatesDirectoryFormat)
 from ._type import (Coordinates)
+from .stats import autocorr
 
 
 citations = Citations.load('citations.bib', package='q2_coordinates')
@@ -41,7 +43,7 @@ base_parameters = {
 }
 
 base_parameter_descriptions = {
-    'metadata': 'The sample metadata containing latitude and longitude data.',
+    'metadata': 'The sample metadata containing coordinate data.',
     'latitude': 'Metadata column containing latitude in decimal degrees.',
     'longitude': 'Metadata column containing longitude in decimal degrees.',
 }
@@ -70,13 +72,12 @@ plugin.visualizers.register_function(
         'color_palette': (
             'Color palette to use for coloring sample points on map.'),
         'discrete': 'Plot continuous column data as discrete values.',
-        'image': 'Base map image to use for coordinate projection.',
-    },
+        'image': 'Base map image to use for coordinate projection.'},
     name='Plot sampling site geocoordinates on a map.',
-    description=
-        'Plots sample geocoordinates onto a map image. Sample points are '
-        'colored by the column name "column", which may be categorical or '
-        'numeric. Note that samples with missing values are silently dropped.',
+    description=('Plots sample geocoordinates onto a map image. Sample points '
+                 'are colored by the column name "column", which may be '
+                 'categorical or numeric. Note that samples with missing '
+                 'values are silently dropped.'),
     citations=[citations['Cartopy']]
 )
 
@@ -97,7 +98,7 @@ plugin.methods.register_function(
 plugin.methods.register_function(
     function=euclidean_distance,
     inputs={},
-    parameters={'metadata': base_parameters['metadata'],
+    parameters={'metadata': Metadata,
                 'x': Str,
                 'y': Str,
                 'z': Str},
@@ -113,6 +114,38 @@ plugin.methods.register_function(
                 'coordinates. '
                 'Note that samples with missing values are silently dropped.',
 )
+
+plugin.visualizers.register_function(
+    function=autocorr,
+    inputs={'distance_matrix': DistanceMatrix},
+    parameters={'metadata': MetadataColumn[Numeric],
+                'permutations': Int % Range(0, None),
+                'two_tailed': Bool,
+                'transformation': Str % Choices(['R', 'B', 'D', 'V']),
+                'intersect_ids': Bool},
+    input_descriptions={'distance_matrix': 'Spatial distance matrix'},
+    parameter_descriptions={
+        'metadata': 'Variable to test for spatial autocorrelation.',
+        'permutations': 'Number of random permutations for calculation of '
+                        'pseudo p-values.',
+        'two_tailed': 'If True (default) analytical p-values for Moran are '
+                      'two tailed, otherwise if False, they are one-tailed. '
+                      'This does not apply to Geary\'s C.',
+        'transformation': 'Weights transformation, default is "R" '
+                          '(row-standardized). Other options include "B": '
+                          'binary, "D": doubly-standardized, "V": '
+                          'variance-stabilizing.',
+        'intersect_ids': 'If supplied, IDs that are not found in both the '
+                         'distance matrix and metadata will be discarded '
+                         'before testing. Default behavior is to error on any '
+                         'mismatched IDs.'},
+    name='Compute Moran\'s I and Geary\'s C autocorrelation statistics.',
+    description='Compute Moran\'s I and Geary\'s C autocorrelation statistics '
+                'on a (geo)spatial distance matrix and an independent '
+                'variable.',
+    citations=[citations['Moran'], citations['Geary']]
+)
+
 
 # Registrations
 plugin.register_formats(CoordinatesFormat, CoordinatesDirectoryFormat)
