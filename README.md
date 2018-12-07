@@ -9,6 +9,12 @@ Currently, StamenTerrain, Open Street Maps, and Google Maps are supported, produ
 
 Map projections are quick for small maps, but may take several minutes for very large maps (e.g., trans-continental).
 
+# Install
+```
+conda install -c conda-forge cartopy
+pip install https://github.com/nbokulich/q2-coordinates/archive/master.zip
+```
+
 # Examples
 In the examples below we will use some bacterial 16S rRNA gene amplicon sequence data collected from Californian vineyards, as described by [Bokulich et al. 2016](https://doi.org/10.1128/mBio.00631-16). 😎🍷
 
@@ -20,7 +26,7 @@ cd q2-coordinates/q2_coordinates/tests/data/
 qiime diversity alpha \
     --i-table even_table.qza \
     --p-metric observed_otus \
-    --o-alpha-diversity alpha_diversity1
+    --o-alpha-diversity alpha_diversity.qza
 
 qiime coordinates draw-map \
     --m-metadata-file alpha_diversity.qza \
@@ -28,7 +34,7 @@ qiime coordinates draw-map \
     --p-latitude latitude \
     --p-longitude longitude \
     --p-column observed_otus \
-    --o-visualization diversity-map
+    --o-visualization diversity-map.qzv
 ```
 
 ![Alt text](./examples/alpha-diversity.jpg?raw=true "coordinates colored by observed species")
@@ -46,7 +52,7 @@ qiime coordinates draw-map \
     --p-latitude latitude \
     --p-longitude longitude \
     --p-discrete \
-    --o-visualization vineyard-map
+    --o-visualization vineyard-map.qzv
 ```
 ![Alt text](./examples/vineyard-map.jpg?raw=true "coordinates colored by metadata values")
 
