@@ -88,7 +88,6 @@ def draw_map(output_dir: str,
     # plot coordinates on map. If column is numeric, color points by column
     if np.issubdtype(metadata[column].dtype, np.number) and not discrete:
         metadata[column] = metadata[column].astype(float)
-        print(metadata[column])
         plt.scatter(metadata[longitude], metadata[latitude],
                     c=list(metadata[column]), transform=ccrs.Geodetic(),
                     cmap=cmap)
