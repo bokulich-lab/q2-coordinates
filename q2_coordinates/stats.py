@@ -11,7 +11,8 @@
 
 import matplotlib.pyplot as plt
 import qiime2
-import pysal
+from pysal import Geary, Moran, lag_spatial
+from pysal import weights as psw
 import pandas as pd
 from skbio import DistanceMatrix
 import seaborn as sns
@@ -71,7 +72,7 @@ def moran_plot(metadata, weights, transformation):
     # perform designated transformation of weights matrix
     weights.transform = transformation
     # compute spatial lag
-    spatial_lag = pysal.lag_spatial(weights, std_y)
+    spatial_lag = lag_spatial(weights, std_y)
     # draw Moran plot
     sns.set_style("whitegrid")
     mplot = sns.regplot(x=std_y, y=spatial_lag, color='grey')
@@ -87,15 +88,14 @@ def autocorr_from_dm(metadata, distance_matrix, permutations, two_tailed,
                      transformation):
 
     # convert distance_matrix to weights matrix
-    weights = pysal.weights.util.full2W(
-        distance_matrix.data, ids=distance_matrix.ids)
+    weights = psw.util.full2W(distance_matrix.data, ids=distance_matrix.ids)
 
     # Compute autocorrelation stats
-    mi = pysal.Moran(metadata, weights, permutations=permutations,
-                     two_tailed=two_tailed, transformation=transformation)
+    mi = Moran(metadata, weights, permutations=permutations,
+               two_tailed=two_tailed, transformation=transformation)
 
-    gc = pysal.Geary(metadata, weights, permutations=permutations,
-                     transformation=transformation)
+    gc = Geary(metadata, weights, permutations=permutations,
+               transformation=transformation)
 
     names = ['Test Statistic', 'Expected Value', 'Z norm', 'p norm']
     moran_res = [mi.I, mi.EI, mi.z_norm, mi.p_norm]

@@ -52,7 +52,6 @@ class TestCoordMethods(CoordinatesTestPluginBase):
         dm, = coordinates.actions.euclidean_distance(
             metadata=self.coord_md, x='x', y='y', z='z')
         dm = dm.view(DistanceMatrix).condensed_form()
-        print(dm)
         exp = np.array([1.30384048, 3.98998747, 4.26848919, 5.17010638,
                         5.62316637, 2.82488938, 3.02324329, 3.93319209,
                         4.37035468, 0.81240384, 2.16564078, 2.28473193,
@@ -63,7 +62,6 @@ class TestCoordMethods(CoordinatesTestPluginBase):
         dm, = coordinates.actions.euclidean_distance(
             metadata=self.coord_md, x='x', y='y')
         dm = dm.view(DistanceMatrix).condensed_form()
-        print(dm)
         exp = np.array([1.30384048, 3.98497177, 4.25793377, 5.0039984,
                         5.51452627, 2.81780056, 3.00832179, 3.71214224,
                         4.2296572,  0.64031242, 1.56204994, 1.87882942,

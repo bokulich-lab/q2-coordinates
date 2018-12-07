@@ -63,11 +63,7 @@ class TestStats(CoordinatesTestPluginBase):
         metadata = self.alpha.to_series()
         metadata, distance_matrix = match_ids(
             metadata, distance_matrix, intersect_ids=True)
-        print(metadata.index)
-        print(distance_matrix.ids)
         results, weights = autocorr_from_dm(
             metadata, distance_matrix, permutations=0,
             two_tailed=True, transformation='R')
-        print(exp)
-        print(results)
         pdt.assert_frame_equal(results, exp)
