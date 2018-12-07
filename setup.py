@@ -28,7 +28,7 @@ setup(
     },
     package_data={
         'q2_coordinates': ['citations.bib'],
-        'q2_coordinates.tests': ['test_data/*'],
+        'q2_coordinates.tests': ['assets/index.html', 'test_data/*'],
     },
     zip_safe=False,
 )
