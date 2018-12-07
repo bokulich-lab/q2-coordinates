@@ -27,6 +27,7 @@ setup(
         ['q2-coordinates=q2_coordinates.plugin_setup:plugin']
     },
     package_data={
+        'q2_coordinates': ['citations.bib'],
         'q2_coordinates.tests': ['test_data/*'],
     },
     zip_safe=False,
