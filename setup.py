@@ -16,7 +16,7 @@ setup(
     license='LGPL-3.0',
     packages=find_packages(),
     install_requires=['biom-format', 'pandas', 'scipy', 'cartopy', 'numpy',
-                      'geopy', 'pysal'],
+                      'geopy', 'pysal=1.14.4'],
     author="Nicholas Bokulich",
     author_email="nbokulich@gmail.com",
     description=("Methods for geographic mapping of qiime2 artifact data or"
