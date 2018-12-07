@@ -1,6 +1,6 @@
 # q2-coordinates
 
-[![Build Status](https://travis-ci.org/qiime2/q2-coordinates.svg?branch=master)](https://travis-ci.org/qiime2/q2-coordinates)
+[![Build Status](https://travis-ci.org/nbokulich/q2-coordinates.svg?branch=master)](https://travis-ci.org/nbokulich/q2-coordinates)
 
 A qiime2 plugin supporting methods for geographic mapping of qiime2 artifact data or metadata.
 
