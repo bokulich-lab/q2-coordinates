@@ -44,10 +44,10 @@ qiime coordinates draw-map \
 
 Note that _any_ metadata-transformable artifacts can be used as a `metadata-file` input to this command, so this opens the door to many other data types, e.g., PCoA results, predictions, etc.
 
-HINT: If you are not sure what the `column` name is for your artifact of interest, use `qiime metadata tabulate` to view as a dataframe.
+HINT: If you are not sure what the `column` name is for your artifact of interest, use `qiime tools inspect-metadata` to see the available column names.
 
 ## Plotting geocoordinates colored by metadata category values
-We can use the same visualizer action for plotting alpha diversity values to color sample points as a function of continuous or categorical sample metadata. To do this, we simply add the "category" parameter to use that category from the sample metadata instead of alpha diversity values (which must still be input for the time being, until qiime2 permits optional artifacts). The plot below shows the various vineyard sites (indicated by anonymous numbers) where samples were collected.
+We can use the same visualizer action for plotting alpha diversity values to color sample points as a function of continuous or categorical sample metadata. To do this, we simply add the "category" parameter to use that category from the sample metadata instead of alpha diversity values. The plot below shows the various vineyard sites (indicated by anonymous numbers) where samples were collected.
 ```
 qiime coordinates draw-map \
     --m-metadata-file chardonnay.map.txt \
