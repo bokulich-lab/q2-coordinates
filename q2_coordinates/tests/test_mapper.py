@@ -42,7 +42,7 @@ class TestMapper(CoordinatesTestPluginBase):
         dm = dm.view(DistanceMatrix)
         error_msg = '\nmismatched IDs: {0}\nobserved:\n{1}\nexpected:\n{2}'
         self.assertTrue(dm == exp, msg=error_msg.format(
-            (dm.ids ^ exp.ids), dm.data, exp.data))
+            (set(dm.ids) ^ set(exp.ids)), dm.data, exp.data))
 
 
 class TestCoordMethods(CoordinatesTestPluginBase):
