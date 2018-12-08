@@ -95,8 +95,8 @@ plugin.methods.register_function(
     citations=[citations['Karney2013']]
 )
 
-coords_description = 'Name of metadata column containing {0}-axis coordinate '
-                     'in cartesian space.'
+coords_description = ('Name of metadata column containing {0}-axis coordinate '
+                      'in cartesian space.')
 
 plugin.methods.register_function(
     function=euclidean_distance,

@@ -23,7 +23,7 @@ class TestStats(CoordinatesTestPluginBase):
         super().setUp()
 
         self.tmpd = self.temp_dir.name
-        dm_fp = self.get_data_path('dm.qza')
+        dm_fp = self.get_data_path('geodesic_distance_matrix.qza')
         self.dm = qiime2.Artifact.load(dm_fp)
         alpha_fp = self.get_data_path('alpha_diversity.qza')
         alpha = qiime2.Artifact.load(alpha_fp)
