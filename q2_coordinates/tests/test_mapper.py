@@ -37,9 +37,11 @@ class TestMapper(CoordinatesTestPluginBase):
         dm, = coordinates.actions.geodesic_distance(
             metadata=self.sample_md, latitude='latitude',
             longitude='longitude')
-        exp = qiime2.Artifact.load(
-            self.get_data_path('geodesic_distance_matrix.qza'))
-        self.assertTrue(dm.view(DistanceMatrix) == exp.view(DistanceMatrix))
+        exp = qiime2.Artifact.load(self.get_data_path(
+            'geodesic_distance_matrix.qza')).view(DistanceMatrix)
+        dm = dm.view(DistanceMatrix)
+        error_msg = 'observed IDs: {0}\nexpected IDs: {1}'
+        self.assertTrue(dm == exp, msg=error_msg.format(dm.ids, exp.ids))
 
 
 class TestCoordMethods(CoordinatesTestPluginBase):
