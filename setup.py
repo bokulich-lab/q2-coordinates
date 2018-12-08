@@ -16,7 +16,7 @@ setup(
     license='BSD-3-Clause',
     packages=find_packages(),
     install_requires=['biom-format', 'pandas', 'scipy', 'cartopy', 'numpy',
-                      'geopy', 'pysal-2.0rc2'],
+                      'geopy', 'pysal'],
     author="Nicholas Bokulich",
     author_email="nbokulich@gmail.com",
     description=("Methods for geographic mapping of qiime2 artifact data or"
