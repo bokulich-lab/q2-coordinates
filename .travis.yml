@@ -18,7 +18,7 @@ install:
   - pip install flake8 coveralls
   - make install
 script:
-  - make test-cov
+  - travis_wait make test-cov
 after_success:
   - coveralls
 
