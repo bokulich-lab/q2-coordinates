@@ -74,10 +74,10 @@ plugin.visualizers.register_function(
         'discrete': 'Plot continuous column data as discrete values.',
         'image': 'Base map image to use for coordinate projection.'},
     name='Plot sampling site geocoordinates on a map.',
-    description=('Plots sample geocoordinates onto a map image. Sample points '
-                 'are colored by the column name "column", which may be '
-                 'categorical or numeric. Note that samples with missing '
-                 'values are silently dropped.'),
+    description=('Plots sample data onto a map using sample geocoordinates. '
+                 'Sample points are colored by the column name "column", '
+                 'which may be categorical or numeric. Note that samples with '
+                 'missing values are silently dropped.'),
     citations=[citations['Cartopy']]
 )
 

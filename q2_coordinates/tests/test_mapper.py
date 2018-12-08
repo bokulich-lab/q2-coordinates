@@ -21,7 +21,7 @@ class TestMapper(CoordinatesTestPluginBase):
 
         alpha_fp = self.get_data_path('alpha_diversity.qza')
         self.alpha = qiime2.Artifact.load(alpha_fp)
-        self.sample_md = self.load_md('chardonnay.map.txt')
+        self.sample_md = self.load_md('chardonnay_sample_metadata.txt')
 
     def test_draw_map_from_alpha_diversity_vector(self):
         coordinates.actions.draw_map(
