@@ -14,8 +14,11 @@ Map projections are quick for small maps, but may take several minutes for very 
 
 # Install
 ```
-conda install -c conda-forge cartopy
 pip install https://github.com/nbokulich/q2-coordinates/archive/master.zip
+```
+Note: Map-drawing functions in q2-coordinates require you do install [cartopy](https://github.com/SciTools/cartopy).
+```
+conda install -c conda-forge cartopy
 ```
 
 # Examples
