@@ -14,6 +14,7 @@ import numpy as np
 from skbio import DistanceMatrix
 import pandas.util.testing as pdt
 from q2_coordinates.stats import autocorr_from_dm, match_ids
+from q2_coordinates._utilities import _load_and_validate
 
 
 # these tests make sure the actions run and accept appropriate inputs
@@ -67,3 +68,29 @@ class TestStats(CoordinatesTestPluginBase):
             metadata, distance_matrix, permutations=0,
             two_tailed=True, transformation='R')
         pdt.assert_frame_equal(results, exp)
+
+
+class TestUtilities(CoordinatesTestPluginBase):
+
+    def test_load_and_validate(self):
+        md = pd.DataFrame(
+            {'a': [1, 2, 3], 'b': [2, 3, np.nan], 'c': [0, 0, 0]},
+            index=['a', 'b', 'c'])
+        md.index.name = 'sampleid'
+        md = qiime2.Metadata(md)
+        # pass: select only valid columns
+        md2 = _load_and_validate(
+            md, ['a', 'c'], ['a', 'c'], missing_data="error")
+        exp = pd.DataFrame({'a': [1, 2, 3], 'c': [0, 0, 0]},
+                           index=['a', 'b', 'c'])
+        pdt.assert_frame_equal(md2, exp, check_dtype=False, check_names=False)
+        # pass: ignore nans
+        md2 = _load_and_validate(
+            md, ['a', 'b', 'c'], ['a', 'b', 'c'], missing_data="ignore")
+        exp = pd.DataFrame({'a': [1, 2], 'b': [2, 3], 'c': [0, 0]},
+                           index=['a', 'b'])
+        pdt.assert_frame_equal(md2, exp, check_dtype=False, check_names=False)
+        # error: catch nans
+        with self.assertRaisesRegex(ValueError, "missing metadata"):
+            md2 = _load_and_validate(
+                md, ['a', 'b', 'c'], ['a', 'b', 'c'], missing_data="error")

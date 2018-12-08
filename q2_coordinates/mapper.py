@@ -29,11 +29,11 @@ from ._utilities import (plot_basemap,
 def geodesic_distance(metadata: qiime2.Metadata,
                       latitude: str='Latitude',
                       longitude: str='Longitude',
-                      intersect_ids: bool=False) -> DistanceMatrix:
+                      missing_data: str='error') -> DistanceMatrix:
 
     sample_md = _load_and_validate(
         metadata, [latitude, longitude], ['latitude', 'longitude'],
-        intersect_ids=intersect_ids)
+        missing_data=missing_data)
 
     # Collect geocoordinate points
     points = [Point(x) for x in zip(sample_md[latitude], sample_md[longitude])]
@@ -52,7 +52,7 @@ def euclidean_distance(metadata: qiime2.Metadata,
                        x: str,
                        y: str,
                        z: str=None,
-                       intersect_ids: bool=False) -> DistanceMatrix:
+                       missing_data: str='error') -> DistanceMatrix:
 
     cols = [x, y]
     names = ['x', 'y']
@@ -60,7 +60,7 @@ def euclidean_distance(metadata: qiime2.Metadata,
         cols.append(z)
         names.append('z')
 
-    sample_md = _load_and_validate(metadata, cols, names, intersect_ids)
+    sample_md = _load_and_validate(metadata, cols, names, missing_data)
 
     # Compute pairwise distances between all points
     distances = scipy.spatial.distance.pdist(
@@ -79,11 +79,11 @@ def draw_map(output_dir: str,
              image: str='StamenTerrain',
              color_palette: str='rainbow',
              discrete: bool=False,
-             intersect_ids: bool=False):
+             missing_data: str='error'):
 
     metadata = _load_and_validate(
         metadata, [column, latitude, longitude],
-        ['column', 'latitude', 'longitude'], intersect_ids)
+        ['column', 'latitude', 'longitude'], missing_data)
 
     # set up basemap
     ax, cmap = plot_basemap(
