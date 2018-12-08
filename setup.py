@@ -12,8 +12,8 @@ from setuptools import find_packages, setup
 
 setup(
     name='q2-coordinates',
-    version='0.0.0-dev',
-    license='LGPL-3.0',
+    version='2018.11',
+    license='BSD-3-Clause',
     packages=find_packages(),
     install_requires=['biom-format', 'pandas', 'scipy', 'cartopy', 'numpy',
                       'geopy', 'pysal-2.0rc2'],
