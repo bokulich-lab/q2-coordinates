@@ -21,9 +21,13 @@ import q2templates
 TEMPLATES = pkg_resources.resource_filename('q2_coordinates', 'assets')
 
 
-def _load_and_validate(metadata, columns, names):
+def _load_and_validate(metadata, columns, names, intersect_ids):
     # load and drop empty data
     metadata = metadata.to_dataframe()
+    if not intersect_ids and metadata.isnull().values.any():
+        raise ValueError(
+            'One or more samples are missing metadata. Check inputs or use '
+            'intersect_ids=True to drop these samples and ignore this error.')
     metadata = metadata[columns].dropna()
 
     # validate inputs

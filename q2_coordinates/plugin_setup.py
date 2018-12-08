@@ -40,12 +40,17 @@ base_parameters = {
     'metadata': Metadata,
     'latitude': Str,
     'longitude': Str,
+    'intersect_ids': Bool
 }
 
 base_parameter_descriptions = {
     'metadata': 'The sample metadata containing coordinate data.',
     'latitude': 'Metadata column containing latitude in decimal degrees.',
     'longitude': 'Metadata column containing longitude in decimal degrees.',
+    'intersect_ids': 'If supplied, IDs that are not found in both the '
+                     'distance matrix and metadata will be discarded '
+                     'before testing. Default behavior is to error on any '
+                     'mismatched IDs.'
 }
 
 
@@ -104,14 +109,16 @@ plugin.methods.register_function(
     parameters={'metadata': Metadata,
                 'x': Str,
                 'y': Str,
-                'z': Str},
+                'z': Str,
+                'intersect_ids': Bool},
     outputs=[('distance_matrix', DistanceMatrix)],
     input_descriptions={},
     parameter_descriptions={
         'metadata': base_parameter_descriptions['metadata'],
         'x': coords_description.format('x'),
         'y': coords_description.format('y'),
-        'z': coords_description.format('z')},
+        'z': coords_description.format('z'),
+        'intersect_ids': base_parameter_descriptions['intersect_ids']},
     name='Create a distance matrix from 2D or 3D cartesian coordinates.',
     description='Measure pairwise euclidean distances between cartesian '
                 'coordinates. '
@@ -138,10 +145,7 @@ plugin.visualizers.register_function(
                           '(row-standardized). Other options include "B": '
                           'binary, "D": doubly-standardized, "V": '
                           'variance-stabilizing.',
-        'intersect_ids': 'If supplied, IDs that are not found in both the '
-                         'distance matrix and metadata will be discarded '
-                         'before testing. Default behavior is to error on any '
-                         'mismatched IDs.'},
+        'intersect_ids': base_parameter_descriptions['intersect_ids']},
     name='Compute Moran\'s I and Geary\'s C autocorrelation statistics.',
     description='Compute Moran\'s I and Geary\'s C autocorrelation statistics '
                 'on a (geo)spatial distance matrix and an independent '
