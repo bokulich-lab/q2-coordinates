@@ -95,6 +95,9 @@ plugin.methods.register_function(
     citations=[citations['Karney2013']]
 )
 
+coords_description = 'Name of metadata column containing {0}-axis coordinate '
+                     'in cartesian space.'
+
 plugin.methods.register_function(
     function=euclidean_distance,
     inputs={},
@@ -106,9 +109,9 @@ plugin.methods.register_function(
     input_descriptions={},
     parameter_descriptions={
         'metadata': base_parameter_descriptions['metadata'],
-        'x': 'x-axis coordinate in cartesian space.',
-        'y': 'y-axis coordinate in cartesian space.',
-        'z': 'z-axis coordinate in cartesian space.'},
+        'x': coords_description.format('x'),
+        'y': coords_description.format('y'),
+        'z': coords_description.format('z')},
     name='Create a distance matrix from 2D or 3D cartesian coordinates.',
     description='Measure pairwise euclidean distances between cartesian '
                 'coordinates. '
