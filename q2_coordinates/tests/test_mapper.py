@@ -42,6 +42,7 @@ class TestMapper(CoordinatesTestPluginBase):
         dm = dm.view(DistanceMatrix)
         error_msg = '\nobs IDs: {0}\nexp IDs: {1}\nobs:\n{2}\nexp:\n{3}'
         np.set_printoptions(threshold=np.inf)
+        self.assertTrue(np.array_equal(dm.data, exp.data))
         self.assertTrue(dm == exp, msg=error_msg.format(
             dm.ids, exp.ids, dm.data, exp.data))
 
