@@ -13,12 +13,17 @@ Currently, StamenTerrain, Open Street Maps, and Google Maps are supported, produ
 Map projections are quick for small maps, but may take several minutes for very large maps (e.g., trans-continental).
 
 # Install
+Note: Map-drawing functions in q2-coordinates require you to install [cartopy](https://github.com/SciTools/cartopy) (note: cartopy is distibuted under a LGPL-3.0 license).
+```
+conda install -c conda-forge cartopy
+```
+Now install q2-coordinates:
 ```
 pip install https://github.com/nbokulich/q2-coordinates/archive/master.zip
 ```
-Note: Map-drawing functions in q2-coordinates require you do install [cartopy](https://github.com/SciTools/cartopy).
+q2-coordinates requires >= pysal 2.0. If this is not installed properly by the command above, install as follows:
 ```
-conda install -c conda-forge cartopy
+pip install pysal==2.0rc2
 ```
 
 # Examples
