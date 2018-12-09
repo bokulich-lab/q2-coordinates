@@ -40,9 +40,11 @@ class TestMapper(CoordinatesTestPluginBase):
         exp = qiime2.Artifact.load(self.get_data_path(
             'geodesic_distance_matrix.qza')).view(DistanceMatrix)
         dm = dm.view(DistanceMatrix)
-        error_msg = '\nmismatched IDs: {0}\nobserved:\n{1}\nexpected:\n{2}'
+        error_msg = '\nobserved IDs: {0}\nexpected IDs: {1}\nobserved:\n'
+                    '{2}\nexpected:\n{3}'
+        np.set_printoptions(threshold=np.inf)
         self.assertTrue(dm == exp, msg=error_msg.format(
-            (set(dm.ids) ^ set(exp.ids)), dm.data, exp.data))
+            dm.ids, exp.ids, dm.data, exp.data))
 
 
 class TestCoordMethods(CoordinatesTestPluginBase):
