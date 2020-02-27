@@ -11,7 +11,8 @@
 
 from qiime2.plugin import (Str, Plugin, Metadata, Choices, Bool, Citations,
                            Int, MetadataColumn, Numeric, Range)
-from .mapper import draw_map, geodesic_distance, euclidean_distance
+from .mapper import (draw_map, geodesic_distance, euclidean_distance,
+                     draw_interactive_map)
 import q2_coordinates
 import importlib
 from q2_types.sample_data import SampleData
@@ -55,6 +56,38 @@ base_parameter_descriptions = {
 
 plugin.visualizers.register_function(
     function=draw_map,
+    inputs={},
+    parameters={**base_parameters,
+                'column': Str,
+                'color_palette': Str % Choices([
+                    'Set1', 'Set2', 'Set3', 'Pastel1', 'Pastel2', 'Paired',
+                    'Accent', 'Dark2', 'tab10', 'tab20', 'tab20b', 'tab20c',
+                    'viridis', 'plasma', 'inferno', 'magma', 'terrain',
+                    'rainbow']),
+                'discrete': Bool,
+                'image': Str % Choices(
+                    ['StamenTerrain', 'OSM', 'GoogleTiles']),
+                },
+    input_descriptions={},
+    parameter_descriptions={
+        **base_parameter_descriptions,
+        'column': ('Metadata column to use for coloring sample points. If '
+                   'none is supplied, will use alpha_diversity artifact for '
+                   'coloring.'),
+        'color_palette': (
+            'Color palette to use for coloring sample points on map.'),
+        'discrete': 'Plot continuous column data as discrete values.',
+        'image': 'Base map image to use for coordinate projection.'},
+    name='Plot sampling site geocoordinates on a map.',
+    description=('Plots sample data onto a map using sample geocoordinates. '
+                 'Sample points are colored by the column name "column", '
+                 'which may be categorical or numeric. Note that samples with '
+                 'missing values are silently dropped.'),
+    citations=[citations['Cartopy']]
+)
+
+plugin.visualizers.register_function(
+    function=draw_interactive_map,
     inputs={},
     parameters={**base_parameters,
                 'column': Str,
