@@ -8,7 +8,7 @@
 
 import qiime2.plugin.model as model
 from qiime2.plugin import ValidationError
-
+import csv
 
 def _validate_record_min_len(cells, current_line_number, exp_len):
     if len(cells) < exp_len:
@@ -57,9 +57,6 @@ CoordinatesDirectoryFormat = model.SingleFileDirectoryFormat(
     'CoordinatesDirectoryFormat', 'coordinates.tsv',
     CoordinatesFormat)
 
-import csv
-
-from ..plugin_setup import plugin
 
 
 class QuadTreeFormat(model.TextFileFormat):
@@ -85,21 +82,15 @@ class QuadTreeFormat(model.TextFileFormat):
 
                     records_seen += 1
 
-            # The first non-comment and non-blank row observed will always be
-            # the header row, and since we have no requirement on the field
-            # names (because they are dynamically defined), so no need to check
-            # for the presence (or validity) of a header row at this point.
-
             if records_seen == 0:
                 raise ValidationError('No records found in file, only '
                                       'observed comments, blank lines, and/or '
                                       'a header row.')
 
 
-QuadTreeDiversityDirectoryFormat = model.SingleFileDirectoryFormat(
+QuadTreeDirectoryFormat = model.SingleFileDirectoryFormat(
     'QuadTreeDirectoryFormat', 'quadtree.tsv',
-    QuadTreeDiversityFormat)
+    QuadTreeFormat)
 
 
-plugin.register_formats(QuadTreeFormat, QuadTreeDirectoryFormat)
        
