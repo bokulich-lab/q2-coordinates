@@ -16,10 +16,10 @@ import importlib
 from q2_types.sample_data import SampleData
 from q2_types.distance_matrix import DistanceMatrix
 from q2_types.tree import Phylogeny, Rooted
-from ._format import (CoordinatesFormat, CoordinatesDirectoryFormat)
-from ._type import (Coordinates)
+from ._format import (CoordinatesFormat, CoordinatesDirectoryFormat, QuadTreeFormat, QuadTreeDirectoryFormat)
+from ._type import (Coordinates, QuadTree)
 from .stats import autocorr
-
+from .qtrees import quadtree
 
 citations = Citations.load('citations.bib', package='q2_coordinates')
 
@@ -185,24 +185,25 @@ plugin.visualizers.register_function(
     citations=[citations['Moran'], citations['Geary']]
 )
 
-plugins.method.register_function(
+plugin.methods.register_function(
     function=quadtree,
-    inputs={'metadata': Metadata},
-    parameters={ 'threshold': Int,
+    inputs={},
+    parameters={'metadata': Metadata,
+	    'threshold': Int,
             'latitude': Str,
             'longitude': Str},
     outputs=[('output_tree', Phylogeny[Rooted]),
-            ('output_table', FeatureTable[Frequency])]
-    input_descriptions={
-        'metadata': 'The sample metadata containing coordinate data.'},
+            ('output_table', SampleData[QuadTree])],
+    input_descriptions={},
     parameter_descriptions={
+	'metadata': 'The sample metadata containing coordinate data.',
         'threshold': 'The amount of samples which constitutes the  "bin" size. '
-                     'If there is more than this amount of samples, the quadtree will divide '
                      'itself again. If there is fewer than this number of samples in a bin '
                      'the tree will not subdivide again.',
         'latitude': 'Metadata column containing latitude in decimal degrees.',
         'longitude': 'Metadata column containing longitude in decimal degrees.'},
-    name='Divide geographic samples into bins by quadtrees based on latitude and longitude'
+    name='Divide geographic samples into bins by quadtrees based on latitude and longitude',
+    description="qtrees"
 
 )
 # Registrations
@@ -214,4 +215,12 @@ plugin.register_semantic_type_to_format(
     SampleData[Coordinates],
     artifact_format=CoordinatesDirectoryFormat)
 
-importlib.import_module('q2_coordinates._transformer')i
+plugin.register_formats(QuadTreeFormat, QuadTreeDirectoryFormat)
+
+plugin.register_semantic_types(QuadTree)
+
+plugin.register_semantic_type_to_format(
+    SampleData[QuadTree],
+    artifact_format=QuadTreeDirectoryFormat)
+importlib.import_module('q2_coordinates._transformer')
+

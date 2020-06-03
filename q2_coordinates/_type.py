@@ -11,3 +11,6 @@ from q2_types.sample_data import SampleData
 
 
 Coordinates = SemanticType('Coordinates', variant_of=SampleData.field['type'])
+QuadTree = SemanticType('QuadTree',
+                              variant_of=SampleData.field['type'])
+

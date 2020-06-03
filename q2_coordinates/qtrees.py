@@ -6,9 +6,8 @@ import biom
 import pandas as pd
 import numpy as np
 import skbio
-import s2sphere as s2
-
-def clean(metadata, latitude, longitude):
+import qiime2
+def clean(metadata, latitude, longitude, index):
     if latitude not in metadata: #and selected method of binning
         raise ValueError("Must have latitude in metadata to use quadtrees")
     if longitude not in metadata: #and selected method of binning
@@ -168,24 +167,26 @@ def create_tree(samples):
     tree.extend(skbio.TreeNode.from_taxonomy(lineages))
     return tree
 
-def create_sample_df(bins, samples):
+def create_sample_df(bins, samples, index):
+    print(samples.head())
+    print(index)
     for samp, bin_i, items in bins:
         bin_name = "H" + str(bin_i)
-        samples[bin_name] = np.where(samples['index'] == samp, items, samples[bin_name])
+        print(samples[index])
+        samples[bin_name] = np.where(samples[index] == samp, items, samples[bin_name])
     return samples
 
-def get_results(cleaned_df, threshold):
+def get_results(cleaned_df, threshold, index):
     cleaned_df = cleaned_df.reset_index()
     xy = cleaned_df.to_numpy()
     q = QTree(threshold, xy)
-
     samples = pd.DataFrame()
-    samples['index'] = cleaned_df['index']
-    samples.set_index("index")
-
+    samples[index] = cleaned_df[index]
+    samples = samples.set_index(index)
     samples, bins = q.subdivide(samples, threshold)
-    samples = create_sample_df(bins, samples)
-    samples = samples.set_index('index')
+    samples = samples.reset_index()
+    samples = create_sample_df(bins, samples, index)
+    samples = samples.set_index(index)
 
     tree = create_tree(samples)
 
@@ -193,9 +194,11 @@ def get_results(cleaned_df, threshold):
 
 def quadtree(metadata:qiime2.Metadata, 
              latitude: str, 
-             longitude:str, 
-             threshold:int) -> pd.Dataframe:
-    cleaned_df = clean(metadata, latitude, longitude)
-    tree, samples = get_results(cleaned_df)
+             longitude:str,
+             threshold:int) -> (skbio.TreeNode, pd.DataFrame):
+    metadata = metadata.to_dataframe()
+    index = metadata.index.name
+    cleaned_df = clean(metadata, latitude, longitude, index)
+    tree, samples = get_results(cleaned_df,threshold, index)
 
     return tree, samples
