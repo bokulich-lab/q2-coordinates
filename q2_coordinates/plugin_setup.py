@@ -190,18 +190,18 @@ plugin.methods.register_function(
     inputs={},
     parameters={'metadata': Metadata,
 	    'threshold': Int,
-            'latitude': Str,
-            'longitude': Str},
+            'x_coord': Str,
+            'y_coord': Str},
     outputs=[('output_tree', Phylogeny[Rooted]),
             ('output_table', SampleData[QuadTree])],
     input_descriptions={},
     parameter_descriptions={
 	'metadata': 'The sample metadata containing coordinate data.',
-        'threshold': 'The amount of samples which constitutes the  "bin" size. '
+        'threshold': 'The amount of samples which constitutes the "bin" size. If there are more samples than this number tehe tree will divide'
                      'itself again. If there is fewer than this number of samples in a bin '
                      'the tree will not subdivide again.',
-        'latitude': 'Metadata column containing latitude in decimal degrees.',
-        'longitude': 'Metadata column containing longitude in decimal degrees.'},
+        'x_coord': 'Metadata column containing latitude in decimal degrees.',
+        'y_coord': 'Metadata column containing longitude in decimal degrees.'},
     name='Divide geographic samples into bins by quadtrees based on latitude and longitude',
     description="qtrees"
 
