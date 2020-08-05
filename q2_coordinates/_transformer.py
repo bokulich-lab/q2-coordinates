@@ -49,7 +49,7 @@ def _read_quad_trees(fh):
 def _4(data: pd.DataFrame) -> QuadTreeFormat:
     ff = QuadTreeFormat()
     with ff.open() as fh:
-        data.to_csv(fh, sep='\t', header=True)
+        data.to_csv(fh, sep='\t', header=True, index=True)
     return ff
 
 
