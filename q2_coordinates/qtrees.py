@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-
 import pandas as pd
 import skbio
 import qiime2
+from functools import partial
 
 
 def clean(metadata, y_coord, x_coord, index):
@@ -27,7 +26,6 @@ def clean(metadata, y_coord, x_coord, index):
     if df.empty is True:
         raise ValueError("x coordinates and/or y coordinates have "
                          "no numeric values, please check your data.")
-
     # resolve points shifted left or down
     xmin = df[x_coord].min()
     if xmin > 0:
@@ -81,13 +79,12 @@ class QTree():
     def __init__(self, threshold, data):
         self.threshold = threshold
         self.points = [Point(x, y, sample_id) for sample_id, x, y in data]
-        x_max = max(x for sample_id, x, y in data)
-        y_max = max(y for sample_id, x, y in data)
+        x_max = max(x for _, x, _ in data)
+        y_max = max(y for _, _, y in data)
         self.root = Node(0, 0, x_max, y_max, self.points, "0")
 
-    def add_point(x, y, sample_id):
-        points.append(Point(x, y, sample_id))
-        self.points = points
+    def add_point(self, x, y, sample_id):
+        self.points.append(Point(x, y, sample_id))
 
     def get_points(self):
         return self.points
@@ -105,7 +102,7 @@ def recursive_subdivide(node, k, depth, node_id, bins):
         return
     elif len(node.points)/k >= len(node.points):
         raise ValueError("The threshold for subdivision is less than "
-                         "the amount of points in one place,",
+                         "the amount of points in one place, "
                          "please chose a larger threshold for division")
     w_ = node.width/2
     h_ = node.height/2
@@ -136,11 +133,11 @@ def recursive_subdivide(node, k, depth, node_id, bins):
         p = contains(node.x0, node.y0, w_, h_, node.points)
         new_id = node_id + quad + "."
         quad_node = Node(node.x0, node.y0, w_, h_, p, new_id)
+        nodes.append(quad_node)
 
         for pt in p:
             bins.append((pt.sample_id, depth, new_id))
 
-        nodes.append(quad_node)
         recursive_subdivide(quad_node, k, depth, new_id, bins)
     node.children = nodes
     return bins
@@ -161,9 +158,11 @@ def create_tree(bins, index):
         sample_grp_sorted = sample_grp.sort_values('depth', ascending=False)
         longest_lineages.append(sample_grp_sorted.iloc[0])
     longest_lineages = pd.DataFrame(longest_lineages)
-
-    tree = skbio.TreeNode.from_taxonomy([(r[index], r['lineage'].split('.')[:-1]) for _, r in longest_lineages.iterrows()]) # noqa
-    return tree
+    lineage_bit = longest_lineages['lineage'].apply(
+        lambda lin: lin.split('.')[:-1])
+    taxonomy = [(i, lin) for i, lin in zip(longest_lineages[index],
+                                           lineage_bit)]
+    return skbio.TreeNode.from_taxonomy(taxonomy)
 
 
 def create_sample_df(bins, index):
@@ -178,7 +177,6 @@ def create_sample_df(bins, index):
             lin = None
         return lin
 
-    from functools import partial
     for depth in range(1, max_depth):
         name = 'split-depth-%d' % depth
         df[name] = df['lineage'].apply(partial(lineage_chopper, depth))
@@ -188,6 +186,7 @@ def create_sample_df(bins, index):
         sample_grp_sorted = sample_grp.sort_values('depth', ascending=False)
         longest_lineages.append(sample_grp_sorted.iloc[0])
     longest_lineages = pd.DataFrame(longest_lineages)
+    longest_lineages.index.name = index
 
     return longest_lineages
 
@@ -210,5 +209,4 @@ def quadtree(metadata: qiime2.Metadata,
     index = metadata.index.name
     cleaned_df = clean(metadata, y_coord, x_coord, index)
     tree, samples = get_results(cleaned_df, threshold, index)
-
     return tree, samples

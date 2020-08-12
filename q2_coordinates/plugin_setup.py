@@ -16,7 +16,8 @@ import importlib
 from q2_types.sample_data import SampleData
 from q2_types.distance_matrix import DistanceMatrix
 from q2_types.tree import Phylogeny, Rooted
-from ._format import (CoordinatesFormat, CoordinatesDirectoryFormat, QuadTreeFormat, QuadTreeDirectoryFormat)
+from ._format import (CoordinatesFormat, CoordinatesDirectoryFormat,
+                      QuadTreeFormat, QuadTreeDirectoryFormat)
 from ._type import (Coordinates, QuadTree)
 from .stats import autocorr
 from .qtrees import quadtree
@@ -189,20 +190,22 @@ plugin.methods.register_function(
     function=quadtree,
     inputs={},
     parameters={'metadata': Metadata,
-	    'threshold': Int,
-            'x_coord': Str,
-            'y_coord': Str},
+                'threshold': Int,
+                'x_coord': Str,
+                'y_coord': Str},
     outputs=[('output_tree', Phylogeny[Rooted]),
-            ('output_table', SampleData[QuadTree])],
+             ('output_table', SampleData[QuadTree])],
     input_descriptions={},
     parameter_descriptions={
-	'metadata': 'The sample metadata containing coordinate data.',
-        'threshold': 'The amount of samples which constitutes the "bin" size. If there are more samples than this number tehe tree will divide'
-                     'itself again. If there is fewer than this number of samples in a bin '
-                     'the tree will not subdivide again.',
-        'x_coord': 'Metadata column containing latitude in decimal degrees.',
-        'y_coord': 'Metadata column containing longitude in decimal degrees.'},
-    name='Divide geographic samples into bins by quadtrees based on latitude and longitude',
+        'metadata': 'The sample metadata containing coordinate data.',
+        'threshold': 'The amount of samples which constitutes the "bin" size.'
+                     'If there are more samples than this number the tree will'
+                     'divide itself again. If there is fewer than this number '
+                     'of samples in a bin the tree will not subdivide again.',
+        'x_coord': 'Metadata column containing x coordinates, i.e. longitude.',
+        'y_coord': 'Metadata column containing y coordinates, i.e. latitude'},
+    name='Divide geographic samples into bins by quadtrees based on'
+         'x and y coordinates',
     description="qtrees"
 
 )
@@ -223,4 +226,3 @@ plugin.register_semantic_type_to_format(
     SampleData[QuadTree],
     artifact_format=QuadTreeDirectoryFormat)
 importlib.import_module('q2_coordinates._transformer')
-
