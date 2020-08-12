@@ -10,6 +10,7 @@ import pandas as pd
 import pandas.testing as pdt
 import qiime2
 
+
 class QuadTreeTestPluginBase(TestPluginBase):
     package = 'q2_coordinates.tests'
 
@@ -59,27 +60,34 @@ class TestSemanticTypeQuad(QuadTreeTestPluginBase):
     def test_pd_dataframe_to_quadtree_format(self):
         transformer = self.get_transformer(pd.DataFrame, QuadTreeFormat)
         exp = pd.DataFrame(
-            {'#SampleID': ('test_1', 'test_2', 'test_3', 'test_4'), 'H1': ('1.', '1.', '1.', '1.'), 'H2':('1.2.', '1.3.', '1.2.','1.3.')}, dtype=object)
+            {'#SampleID': ('test_1', 'test_2', 'test_3', 'test_4'),
+             'depth': ('2', '2', '2', '2'),
+             'lineage': ('1.2.', '1.3.', '1.2.', '1.3.'),
+             'split_depth_1': ('1', '1', '1', '1'),
+             'split_depth_2': ('1.2', '1.3', '1.2', '1.3')}, dtype=object)
         exp = exp.set_index('#SampleID')
         obs = transformer(exp)
         obs = pd.read_csv(str(obs), sep='\t', index_col=0, dtype=object)
         pdt.assert_frame_equal(exp, obs)
 
-
     def test_quadtree_format_to_pd_dataframe(self):
         _, obs = self.transform_format(
             QuadTreeFormat, pd.DataFrame, 'quadtree.tsv')
         exp = pd.DataFrame(
-            {'#SampleID': ('test_1', 'test_2', 'test_3', 'test_4'), 'H1': ('1.', '1.', '1.', '1.'), 'H2':('1.2.', '1.3.', '1.2.','1.3.')}, dtype=object)
+            {'#SampleID': ('test_1', 'test_2', 'test_3', 'test_4'),
+             'depth': ('2', '2', '2', '2'),
+             'lineage': ('1.2.', '1.3.', '1.2.', '1.3.'),
+             'split_depth_1': ('1', '1', '1', '1'),
+             'split_depth_2': ('1.2', '1.3', '1.2', '1.3')}, dtype=object)
         exp = exp.set_index('#SampleID')
         pdt.assert_frame_equal(exp, obs)
 
     def test_quadtree_format_to_metadata(self):
         _, obs = self.transform_format(
             QuadTreeFormat, qiime2.Metadata, 'quadtree.tsv')
-        obs_category = obs.get_column('H1')
-        exp_index = pd.Index(['test_1', 'test_2', 'test_3', 'test_4'],name='#SampleID', dtype=object)
-        exp = pd.Series(['1.', '1.', '1.', '1.'],
-                        name='H1', index=exp_index)
+        obs_category = obs.get_column('split_depth_1')
+        exp_index = pd.Index(['test_1', 'test_2', 'test_3', 'test_4'],
+                             name='#SampleID', dtype=object)
+        exp = pd.Series(['1', '1', '1', '1'],
+                        name='split_depth_1', index=exp_index)
         pdt.assert_series_equal(exp, obs_category.to_series())
-

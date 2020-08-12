@@ -39,14 +39,14 @@ class BasicTest(unittest.TestCase):
         self.moved_df.index.name = self.index
 
         # create answer dataframe
-        correct_dic = {'test_id_sw1': ['2', '3.3', '3', '3.3'],
-                       'test_id_nw1': ['2', '1.1.', '1', '1.1'],
-                       'test_id_ne1': ['2', '2.2.', '2', '2.2'],
-                       'test_id_se1': ['2', '4.4.', '4', '4.4'],
-                       'test_id_sw2': ['2', '3.1.', '3', '3.1'],
-                       'test_id_nw2': ['2', '1.3.', '1', '1.3'],
-                       'test_id_ne2': ['2', '2.4.', '2', '2.4'],
-                       'test_id_se2': ['2', '4.2.', '4', '4.2']}
+        correct_dic = {'test_id_sw1': [2, '3.3.', '3', '3.3'],
+                       'test_id_nw1': [2, '1.1.', '1', '1.1'],
+                       'test_id_ne1': [2, '2.2.', '2', '2.2'],
+                       'test_id_se1': [2, '4.4.', '4', '4.4'],
+                       'test_id_sw2': [2, '3.1.', '3', '3.1'],
+                       'test_id_nw2': [2, '1.3.', '1', '1.3'],
+                       'test_id_ne2': [2, '2.4.', '2', '2.4'],
+                       'test_id_se2': [2, '4.2.', '4', '4.2']}
 
         # set the correct dataframe
         self.correct_dataframe = pd.DataFrame.from_dict(
@@ -104,10 +104,8 @@ class BasicTest(unittest.TestCase):
             lat_long_str_pts,
             columns=['SampleID', 'longitude', 'latitude'])
         str_only_df = str_only_df.set_index(self.index)
-
         with self.assertRaises(ValueError):
-            str_cleaned = qtrees.clean(str_only_df, 'latitude',
-                                       'longitude', 'SampleID')
+            qtrees.clean(str_only_df, 'latitude', 'longitude', 'SampleID')
 
     def test_zero(self):
         pdt.assert_frame_equal(self.moved_df,
@@ -115,25 +113,30 @@ class BasicTest(unittest.TestCase):
                                    self.test_df, y_coord='latitude',
                                    x_coord='longitude', index='SampleID'))
 
-        move_left_dict = {"test_1": {45.0, 45.0},
-                          "test_2": {90, 90},
-                          "test_3": {75, 90}}
-        move_left_df = pd.DataFrame.from_dict(
-            move_left_dict,
-            orient='index',
-            columns=['longitude', 'latitude'])
-        move_left_df.index.name = self.index
+        move_left = [['test_1', 45.0, 45.0],
+                     ['test_2', 90, 95],
+                     ['test_3', 70, 92]]
 
-        zero_left_dict = {"test_1": {0.0, 0.0},
-                          "test_2": {45, 45},
-                          "test_3": {30, 45}}
-        zero_left_df = pd.DataFrame.from_dict(
-            zero_left_dict,
-            orient='index',
-            columns=['longitude', 'latitude'])
+        move_left_df = pd.DataFrame(
+            move_left,
+            columns=['SampleID', 'longitude', 'latitude'])
+        move_left_df = move_left_df.set_index('SampleID')
+
+        zero_left = [['test_1', 0.0, 0.0],
+                     ['test_2', 45, 50],
+                     ['test_3', 25, 47]]
+
+        zero_left_df = pd.DataFrame(
+            zero_left,
+            columns=['SampleID', 'longitude', 'latitude'])
+        zero_left_df = zero_left_df.set_index('SampleID')
+
         zero_left_df.index.name = self.index
-
-        pdt.assert_frame_equal(move_left_df, zero_left_df)
+        pdt.assert_frame_equal(zero_left_df,
+                               qtrees.clean(move_left_df,
+                                            y_coord='latitude',
+                                            x_coord='longitude',
+                                            index='SampleID'))
 
     def test_get_results_outer(self):
         threshold = 2
@@ -142,69 +145,73 @@ class BasicTest(unittest.TestCase):
         test_tree, test_samples = qtrees.get_results(self.moved_df,
                                                      threshold,
                                                      index='SampleID')
-        pdt.assert_frame_equal(test_samples, self.correct_dataframe)
+        pdt.assert_frame_equal(test_samples.sort_index(),
+                               self.correct_dataframe.sort_index())
         self.assertEqual(test_tree.compare_subsets(self.correct_tree), 0.0)
         self.assertEqual(test_tree.compare_rfd(self.correct_tree), 0.0)
 
     def test_threshold(self):
         threshold = 1
         with self.assertRaises(ValueError):
-            tree_1, samples_1 = qtrees.get_results(self.test_df, 
-                                                   threshold, 
+            tree_1, samples_1 = qtrees.get_results(self.test_df,
+                                                   threshold,
                                                    index='SampleID')
- 
         threshold = 5
-        correct_depth_pt = [['test_id_sw1', 1, '3.', 3],
-                            ['test_id_nw1', 1, '1.', 1],
-                            ['test_id_ne1', 1, '2.', 2],
-                            ['test_id_se1', 1, '4.', 4],
-                            ['test_id_sw2', 1, '3.', 3],
-                            ['test_id_nw2', 1, '1.', 1],
-                            ['test_id_ne2', 1, '2.', 2],
-                            ['test_id_se2', 1, '4.', 4]]
+        correct_depth_pt = [['test_id_sw1', 1, '3.', '3'],
+                            ['test_id_nw1', 1, '1.', '1'],
+                            ['test_id_ne1', 1, '2.', '2'],
+                            ['test_id_se1', 1, '4.', '4'],
+                            ['test_id_sw2', 1, '3.', '3'],
+                            ['test_id_nw2', 1, '1.', '1'],
+                            ['test_id_ne2', 1, '2.', '2'],
+                            ['test_id_se2', 1, '4.', '4']]
 
-        #Set the correct dataframe
         correct_depth_df = pd.DataFrame(
             correct_depth_pt,
             columns=['SampleID', 'depth', 'lineage', 'split-depth-1'])
-        correct_depth_df = correct_depth_df.set_index('SampleID')
- 
-        tree_, samples_4 = qtrees.get_results(self.moved_df, threshold=5, index='SampleID')
-        pdt.assert_frame_equal(samples_4, correct_depth_df)
-        
+        correct_depth_df = correct_depth_df.set_index('SampleID').sort_index()
+
+        tree_, samples_4 = qtrees.get_results(self.moved_df,
+                                              threshold=5,
+                                              index='SampleID')
+        pdt.assert_frame_equal(samples_4.sort_index(), correct_depth_df)
+
         threshold = 8
-        tree_8, samples_8 = qtrees.get_results(self.moved_df, threshold, index='SampleID')
-        pdt.assert_frame_equal(samples_8, correct_depth1_df)
+        tree_8, samples_8 = qtrees.get_results(self.moved_df,
+                                               threshold,
+                                               index='SampleID')
+        pdt.assert_frame_equal(samples_8.sort_index(), correct_depth_df)
 
-
-    # test the same dataframe to confirm consistant "mapping" 
+    # test the same dataframe to confirm consistant "mapping"
     # to the same quadrants for boundary points
     def test_boundaries(self):
         boundary_points = [['test_1', 180, 90],
-            ['test_2', 90, 90],
-            ['test_3', 180, 45],
-            ['test_4', 180, 135],
-            ['test_5', 360.0, 90.0]]
+                           ['test_2', 90, 90],
+                           ['test_3', 180, 45],
+                           ['test_4', 180, 135],
+                           ['test_5', 360.0, 90.0]]
 
-        boundary_df =pd.DataFrame(
+        boundary_df = pd.DataFrame(
             boundary_points,
-            columns = ['SampleID', 'longitude', 'latitude'])
+            columns=['SampleID', 'longitude', 'latitude'])
         boundary_df = boundary_df.set_index('SampleID')
-        
 
         boundary_points_2 = [['test_1', 180, 90],
-            ['test_2', 90, 90],
-            ['test_3', 180, 45],
-            ['test_4', 180, 135],
-            ['test_5', 360.0, 90.0]]
+                             ['test_2', 90, 90],
+                             ['test_3', 180, 45],
+                             ['test_4', 180, 135],
+                             ['test_5', 360.0, 90.0]]
 
-        boundary_df_2 =pd.DataFrame(
+        boundary_df_2 = pd.DataFrame(
             boundary_points_2,
-            columns = ['SampleID', 'longitude', 'latitude'])
+            columns=['SampleID', 'longitude', 'latitude'])
         boundary_df_2 = boundary_df_2.set_index('SampleID')
+
         tree, samples = qtrees.get_results(boundary_df, 4, index='SampleID')
-        tree_2, samples_2 = qtrees.get_results(boundary_df_2, 4, index='SampleID')
+        tree_2, samples_2 = qtrees.get_results(boundary_df_2, 4,
+                                               index='SampleID')
         pdt.assert_frame_equal(samples_2, samples)
- 
+
+
 if __name__ == '__main__':
-    unittest.main()                
+    unittest.main()

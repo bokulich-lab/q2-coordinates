@@ -10,6 +10,7 @@ import qiime2.plugin.model as model
 from qiime2.plugin import ValidationError
 import csv
 
+
 def _validate_record_min_len(cells, current_line_number, exp_len):
     if len(cells) < exp_len:
         raise ValidationError(
@@ -58,7 +59,6 @@ CoordinatesDirectoryFormat = model.SingleFileDirectoryFormat(
     CoordinatesFormat)
 
 
-
 class QuadTreeFormat(model.TextFileFormat):
     def _validate_(self, level):
         with self.open() as fh:
@@ -91,6 +91,3 @@ class QuadTreeFormat(model.TextFileFormat):
 QuadTreeDirectoryFormat = model.SingleFileDirectoryFormat(
     'QuadTreeDirectoryFormat', 'quadtree.tsv',
     QuadTreeFormat)
-
-
-       
