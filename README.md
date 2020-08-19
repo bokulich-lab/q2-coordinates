@@ -3,7 +3,9 @@
 [![Build Status](https://travis-ci.org/nbokulich/q2-coordinates.svg?branch=master)](https://travis-ci.org/nbokulich/q2-coordinates) [![Coverage Status](https://coveralls.io/repos/github/nbokulich/q2-coordinates/badge.svg?branch=master)](https://coveralls.io/github/nbokulich/q2-coordinates?branch=master) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2124295.svg)](https://doi.org/10.5281/zenodo.2124295)
 
 
-A qiime2 plugin supporting methods for geographic mapping of qiime2 artifact data or metadata.
+A qiime2 plugin supporting methods for geographic mapping of qiime2 artifact data or metadata. 
+
+Quadtree functionality allows the user to objectivley partition a dataset based on x and y coordinate information (for example, longitude and latitude).
 
 q2-coordinates makes it easy to plot geographic coordinates and associated (meta)data on beautiful topographic and street maps.
 
@@ -116,3 +118,15 @@ qiime coordinates autocorr \
 ```
 
 Moran's I ranges from -1 (negative spatial autocorrelation) to 1 (positive spatial autocorrelation); values near 0 or the expected I (EI, which approaches 0 with large sample sizes) indicate a random spatial distribution. Geary's C ranges from 0 (positive spatial autocorrelation) to some unspecified value greater than 1 (negative spatial autocorrelation); values near 1 indicate a random distribution. Both are global autocorrelation tests, though Geary's C is much more sensitive to local autocorrelation processes. The accompanying Moran plot shows the relationship between the variable of interest and its own spatial lag (i.e., the degree to which neighboring observations are autocorrelated).
+
+## Using quadtrees
+The quadtree function splits the region of points into bins recursively based on a threshold. If the number of samples in a section is larger than the threshold they will split into four, allowing detailed use, description, and partitioning of space based on sample density.
+
+```
+qiime coordinates quadtree \
+    --m-metadata-file q2_coordinates/tests/data/chardonnay_sample_metadata.txt \
+    --p-y-coord latitude \
+    --p-x-coord longitude \
+    --p-threshold 50 \
+    --output-dir test
+```
