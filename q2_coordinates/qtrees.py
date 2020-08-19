@@ -102,7 +102,7 @@ def recursive_subdivide(node, k, depth, node_id, bins):
         return
     elif len(node.points)/k >= len(node.points):
         raise ValueError("The threshold for subdivision is less than "
-                         "the amount of points in one place, "
+                         "the amount of points, "
                          "please chose a larger threshold for division")
     w_ = node.width/2
     h_ = node.height/2
@@ -154,6 +154,7 @@ def contains(x, y, w, h, points):
 def create_tree(bins, index):
     df = pd.DataFrame(bins, columns=[index, 'depth', 'lineage'])
     longest_lineages = []
+    print(df)
     for sample_id, sample_grp in df.groupby(index):
         sample_grp_sorted = sample_grp.sort_values('depth', ascending=False)
         longest_lineages.append(sample_grp_sorted.iloc[0])
@@ -168,8 +169,12 @@ def create_tree(bins, index):
 def create_sample_df(bins, index):
     df = pd.DataFrame(bins,
                       columns=[index, 'depth', 'lineage']).set_index(index)
-
-    max_depth = max([lineage.count('.') for lineage in df['lineage']])+1
+    try:
+        max_depth = max([lineage.count('.') for lineage in df['lineage']])
+    except ValueError:
+        raise ValueError("The threshold for subdivision is greater than "
+                         "the amount of samples, "
+                         "please chose a smaller threshold for division")
 
     def lineage_chopper(depth, lineage):
         lin = '.'.join(lineage.split('.', depth)[:depth])

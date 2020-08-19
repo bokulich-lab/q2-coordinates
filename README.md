@@ -3,7 +3,9 @@
 [![Build Status](https://travis-ci.org/nbokulich/q2-coordinates.svg?branch=master)](https://travis-ci.org/nbokulich/q2-coordinates) [![Coverage Status](https://coveralls.io/repos/github/nbokulich/q2-coordinates/badge.svg?branch=master)](https://coveralls.io/github/nbokulich/q2-coordinates?branch=master) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2124295.svg)](https://doi.org/10.5281/zenodo.2124295)
 
 
-A qiime2 plugin supporting methods for geographic mapping of qiime2 artifact data or metadata.
+A qiime2 plugin supporting methods for geographic mapping of qiime2 artifact data or metadata. 
+
+Quadtree functionality allows the user to objectivley partition a dataset based on x and y coordinate information (for example, longitude and latitude).
 
 q2-coordinates makes it easy to plot geographic coordinates and associated (meta)data on beautiful topographic, street maps or interactive geographical maps.
 
@@ -140,5 +142,42 @@ qiime coordinates autocorr \
 
 Moran's I ranges from -1 (negative spatial autocorrelation) to 1 (positive spatial autocorrelation); values near 0 or the expected I (EI, which approaches 0 with large sample sizes) indicate a random spatial distribution. Geary's C ranges from 0 (positive spatial autocorrelation) to some unspecified value greater than 1 (negative spatial autocorrelation); values near 1 indicate a random distribution. Both are global autocorrelation tests, though Geary's C is much more sensitive to local autocorrelation processes. The accompanying Moran plot shows the relationship between the variable of interest and its own spatial lag (i.e., the degree to which neighboring observations are autocorrelated).
 
+## Using quadtrees
+The quadtree function splits the region of points into bins recursively based on a threshold. If the number of samples in a section is larger than the threshold they will split into four, allowing detailed use, description, and partitioning of space based on sample density.
+
+```
+qiime coordinates quadtree \
+    --m-metadata-file q2_coordinates/tests/data/chardonnay_sample_metadata.txt \
+    --p-y-coord latitude \
+    --p-x-coord longitude \
+    --p-threshold 50 \
+    --output-dir test
+```
+
+### Visualizing quadtrees
+Quadtrees can easily be visualized using a mix of python and other existing qiime2 plugins. Some ideas inclued:
+1. using q2-coordinates draw map to disply the sample positions and color code them by respective quadrant (i.e: set the "column" parameter to the split-depth you want to look at)
+2. using q2-empress to view and navigate the tree to see number and size of splits.
+
+        #### in python
+        import qiime2
+        import skbio
+        ar = qiime2.Artifact.load('test\tree.qza')
+        tree = ar.view(skbio.TreeNode)
+        for node in tree.traverse():
+            if node.length is None:
+                node.length = 1.0
+        new_ar = qiime2.Artifact.import_data('Phylogeny[Rooted]', tree)
+        new_ar.save('test\new_tree.qza')
+
+        #### then using qiime2 cli
+        ```
+            qiime empress tree-plot \
+            --i-tree test\new_tree.qza \
+            --m-feature-metadata-file q2_coordinates/tests/data/chardonnay_sample_metadata.txt \
+            --output-dir empress
+        ```
+
 # License
 q2-coordinates is released under a BSD-3-Clause license. See LICENSE for more details.
+=======
