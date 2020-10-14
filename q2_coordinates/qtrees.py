@@ -153,18 +153,7 @@ def contains(x, y, w, h, points):
 def create_sample_df(bins, index):
     df = pd.DataFrame(bins,
                       columns=[index, 'depth', 'lineage']).set_index(index)
-    try:
-        max_depth = max([lineage.count('.') for lineage in df['lineage']])+1
-    except ValueError:
-        raise ValueError("The threshold for subdivision is greater than "
-                         "the amount of samples, "
-                         "please chose a smaller threshold for division")
 
-    def lineage_chopper(depth, lineage):
-        lin = '.'.join(lineage.split('.', depth)[:depth])
-        if lineage.count('.') < depth:
-            lin = None
-        return lin
 
     for depth in range(1, max_depth):
         name = 'split-depth-%d' % depth
@@ -179,18 +168,43 @@ def create_sample_df(bins, index):
     return longest_lineages
 
 
-def create_tree(bins, index):
+def create_tree_df(bins, index):
+    ##create df for trees and df
     df = pd.DataFrame(bins, columns=[index, 'depth', 'lineage'])
+    try:
+        max_depth = max([lineage.count('.') for lineage in df['lineage']])+1
+    except ValueError:
+        raise ValueError("The threshold for subdivision is greater than "
+                         "the amount of samples, "
+                         "please chose a smaller threshold for division")
+
+    ##for df only
+    def lineage_chopper(depth, lineage):
+        lin = '.'.join(lineage.split('.', depth)[:depth])
+        if lineage.count('.') < depth:
+            lin = None
+        return lin
+
+    for depth in range(1, max_depth):
+        name = 'split-depth-%d' % depth
+        df[name] = df['lineage'].apply(partial(lineage_chopper, depth))
+
+    ##tree and df
     longest_lineages = []
     for sample_id, sample_grp in df.groupby(index):
         sample_grp_sorted = sample_grp.sort_values('depth', ascending=False)
         longest_lineages.append(sample_grp_sorted.iloc[0])
     longest_lineages = pd.DataFrame(longest_lineages)
+    ##tree only
     lineage_bit = longest_lineages['lineage'].apply(
         lambda lin: lin.split('.')[:-1])
     taxonomy = [(i, lin) for i, lin in zip(longest_lineages[index],
                                            lineage_bit)]
-    return skbio.TreeNode.from_taxonomy(taxonomy)
+    ##df formatting
+    longest_lineages = pd.DataFrame(longest_lineages).set_index(index)
+    longest_lineages.index.name = index
+
+    return skbio.TreeNode.from_taxonomy(taxonomy), longest_lineages
 
 
 def get_results(cleaned_df, threshold, index):
@@ -198,8 +212,7 @@ def get_results(cleaned_df, threshold, index):
     xy = cleaned_df.to_numpy()
     q = QTree(threshold, xy)
     bins = q.subdivide(threshold)
-    samples = create_sample_df(bins, index)
-    tree = create_tree(bins, index)
+    tree, samples = create_tree_df(bins, index)
     return tree, samples
 
 
@@ -211,4 +224,5 @@ def quadtree(metadata: qiime2.Metadata,
     index = metadata.index.name
     cleaned_df = clean(metadata, y_coord, x_coord)
     tree, samples = get_results(cleaned_df, threshold, index)
+
     return tree, samples
