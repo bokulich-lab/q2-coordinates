@@ -175,9 +175,13 @@ plugin.methods.register_function(
                      'of samples in a bin the tree will not subdivide again.',
         'x_coord': 'Metadata column containing x coordinates, i.e. longitude.',
         'y_coord': 'Metadata column containing y coordinates, i.e. latitude'},
-    name='Divide geographic samples into bins by quadtrees based on'
+    name='Divide samples into bins by quadtrees based on'
          'x and y coordinates',
-    description="qtrees"
+    description='Objective binning of samples based on spatial data '
+                'by quadtrees. While there are samples '
+                '(greater than the threshold) in a partition '
+                'that partition will split into four allowing for quick '
+                'binning based both on location and sample density.',
 
 )
 # Registrations

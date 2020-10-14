@@ -55,7 +55,6 @@ class BasicTest(unittest.TestCase):
             columns=['depth', 'lineage',
                      'split-depth-1', 'split-depth-2'])
         self.correct_dataframe.index.name = self.index
-
         # set the correct tree
         self.correct_tree = skbio.TreeNode.read(
             StringIO(
@@ -74,9 +73,9 @@ class BasicTest(unittest.TestCase):
                        'test_id_na': ["", ""]}
 
         to_clean_dataframe = pd.DataFrame.from_dict(
-            unclean_dic,
-            orient='index',
-            columns=['longitude', 'latitude'])
+	     unclean_dic,
+	     orient='index',
+             columns=['longitude', 'latitude'])
         to_clean_dataframe.index.name = self.index
 
         correct_cleaned_points = {'test_id_sw': [0, 0],
@@ -94,7 +93,7 @@ class BasicTest(unittest.TestCase):
 
         cleaned = qtrees.clean(
              to_clean_dataframe, y_coord='latitude',
-             x_coord='longitude', index='SampleID')
+             x_coord='longitude')
 
         pdt.assert_frame_equal(cleaned, correct_cleaned_df)
 
@@ -105,13 +104,13 @@ class BasicTest(unittest.TestCase):
             columns=['SampleID', 'longitude', 'latitude'])
         str_only_df = str_only_df.set_index(self.index)
         with self.assertRaises(ValueError):
-            qtrees.clean(str_only_df, 'latitude', 'longitude', 'SampleID')
+            qtrees.clean(str_only_df, 'latitude', 'longitude')
 
     def test_zero(self):
         pdt.assert_frame_equal(self.moved_df,
                                qtrees.clean(
                                    self.test_df, y_coord='latitude',
-                                   x_coord='longitude', index='SampleID'))
+                                   x_coord='longitude'))
 
         move_left = [['test_1', 45.0, 45.0],
                      ['test_2', 90, 95],
@@ -135,16 +134,16 @@ class BasicTest(unittest.TestCase):
         pdt.assert_frame_equal(zero_left_df,
                                qtrees.clean(move_left_df,
                                             y_coord='latitude',
-                                            x_coord='longitude',
-                                            index='SampleID'))
+                                            x_coord='longitude'))
 
     def test_get_results_outer(self):
         threshold = 2
         self.clean = qtrees.clean(self.test_df, y_coord='latitude',
-                                  x_coord='longitude', index='SampleID')
+                                  x_coord='longitude')
         test_tree, test_samples = qtrees.get_results(self.moved_df,
                                                      threshold,
                                                      index='SampleID')
+
         pdt.assert_frame_equal(test_samples.sort_index(),
                                self.correct_dataframe.sort_index())
         self.assertEqual(test_tree.compare_subsets(self.correct_tree), 0.0)
@@ -156,7 +155,6 @@ class BasicTest(unittest.TestCase):
             tree_1, samples_1 = qtrees.get_results(self.test_df,
                                                    threshold,
                                                    index='SampleID')
-        threshold = 5
         correct_depth_pt = [['test_id_sw1', 1, '3.', '3'],
                             ['test_id_nw1', 1, '1.', '1'],
                             ['test_id_ne1', 1, '2.', '2'],
@@ -170,15 +168,13 @@ class BasicTest(unittest.TestCase):
             correct_depth_pt,
             columns=['SampleID', 'depth', 'lineage', 'split-depth-1'])
         correct_depth_df = correct_depth_df.set_index('SampleID').sort_index()
-
         tree_, samples_4 = qtrees.get_results(self.moved_df,
                                               threshold=5,
                                               index='SampleID')
         pdt.assert_frame_equal(samples_4.sort_index(), correct_depth_df)
 
-        threshold = 8
         tree_8, samples_8 = qtrees.get_results(self.moved_df,
-                                               threshold,
+                                               threshold=8,
                                                index='SampleID')
         pdt.assert_frame_equal(samples_8.sort_index(), correct_depth_df)
 
