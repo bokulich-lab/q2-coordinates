@@ -6,7 +6,7 @@ import qiime2
 from functools import partial
 
 
-def clean(metadata, y_coord, x_coord, index):
+def clean(metadata, y_coord, x_coord):
 
     if y_coord not in metadata:
         raise ValueError("Must have y_coord in metadata to use quadtrees")
@@ -150,27 +150,11 @@ def contains(x, y, w, h, points):
             pts.append(point)
     return pts
 
-
-def create_tree(bins, index):
-    df = pd.DataFrame(bins, columns=[index, 'depth', 'lineage'])
-    longest_lineages = []
-    print(df)
-    for sample_id, sample_grp in df.groupby(index):
-        sample_grp_sorted = sample_grp.sort_values('depth', ascending=False)
-        longest_lineages.append(sample_grp_sorted.iloc[0])
-    longest_lineages = pd.DataFrame(longest_lineages)
-    lineage_bit = longest_lineages['lineage'].apply(
-        lambda lin: lin.split('.')[:-1])
-    taxonomy = [(i, lin) for i, lin in zip(longest_lineages[index],
-                                           lineage_bit)]
-    return skbio.TreeNode.from_taxonomy(taxonomy)
-
-
 def create_sample_df(bins, index):
     df = pd.DataFrame(bins,
                       columns=[index, 'depth', 'lineage']).set_index(index)
     try:
-        max_depth = max([lineage.count('.') for lineage in df['lineage']])
+        max_depth = max([lineage.count('.') for lineage in df['lineage']])+1
     except ValueError:
         raise ValueError("The threshold for subdivision is greater than "
                          "the amount of samples, "
@@ -192,8 +176,21 @@ def create_sample_df(bins, index):
         longest_lineages.append(sample_grp_sorted.iloc[0])
     longest_lineages = pd.DataFrame(longest_lineages)
     longest_lineages.index.name = index
-
     return longest_lineages
+
+
+def create_tree(bins, index):
+    df = pd.DataFrame(bins, columns=[index, 'depth', 'lineage'])
+    longest_lineages = []
+    for sample_id, sample_grp in df.groupby(index):
+        sample_grp_sorted = sample_grp.sort_values('depth', ascending=False)
+        longest_lineages.append(sample_grp_sorted.iloc[0])
+    longest_lineages = pd.DataFrame(longest_lineages)
+    lineage_bit = longest_lineages['lineage'].apply(
+        lambda lin: lin.split('.')[:-1])
+    taxonomy = [(i, lin) for i, lin in zip(longest_lineages[index],
+                                           lineage_bit)]
+    return skbio.TreeNode.from_taxonomy(taxonomy)
 
 
 def get_results(cleaned_df, threshold, index):
@@ -212,6 +209,6 @@ def quadtree(metadata: qiime2.Metadata,
              threshold: int) -> (skbio.TreeNode, pd.DataFrame):
     metadata = metadata.to_dataframe()
     index = metadata.index.name
-    cleaned_df = clean(metadata, y_coord, x_coord, index)
+    cleaned_df = clean(metadata, y_coord, x_coord)
     tree, samples = get_results(cleaned_df, threshold, index)
     return tree, samples
