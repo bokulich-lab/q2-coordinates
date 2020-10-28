@@ -1,4 +1,4 @@
-# q2-coordinates
+#q2-coordinates
 
 [![Build Status](https://travis-ci.org/nbokulich/q2-coordinates.svg?branch=master)](https://travis-ci.org/nbokulich/q2-coordinates) [![Coverage Status](https://coveralls.io/repos/github/nbokulich/q2-coordinates/badge.svg?branch=master)](https://coveralls.io/github/nbokulich/q2-coordinates?branch=master) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2124295.svg)](https://doi.org/10.5281/zenodo.2124295)
 
@@ -130,3 +130,8 @@ qiime coordinates quadtree \
     --p-threshold 50 \
     --output-dir test
 ```
+
+## Visualizing quadtrees
+Quadtrees can easily be visualized using a mix of python and other existing qiime2 plugins. Some ideas inclued:
+1. using q2-coordinates draw map to disply the sample positions and color code them by respective quadrant (i.e: set the "column" parameter to the split-depth you want to look at)
+2. using q2-empress to view and navigate the tree to see number and size of splits.
