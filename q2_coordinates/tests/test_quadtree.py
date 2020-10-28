@@ -58,10 +58,10 @@ class BasicTest(unittest.TestCase):
         # set the correct tree
         self.correct_tree = skbio.TreeNode.read(
             StringIO(
-                "((('test_id_sw1')'3.3', ('test_id_sw2')'3.1')'3.',"
-                "(('test_id_nw1')'1.1.', ('test_id_nw2')'1.3.')'1.',"
-                "(('test_id_se1')'4.4.', ('test_id_se2')'4.2.')'4.',"
-                "(('test_id_ne1')'2.2.', ('test_id_ne2')'2.4.')'2.')root;"))
+                "((('test_id_sw1')'3', ('test_id_sw2')'1')'3.',"
+                "(('test_id_nw1')'1', ('test_id_nw2')'3')'1.',"
+                "(('test_id_se1')'4', ('test_id_se2')'2')'4.',"
+                "(('test_id_ne1')'2', ('test_id_ne2')'4')'2.')root;"))
 
     # clean dataframe tests
     def test_clean_df(self):
@@ -136,14 +136,13 @@ class BasicTest(unittest.TestCase):
                                             y_coord='latitude',
                                             x_coord='longitude'))
 
-    def test_get_results_outer(self):
+    def test_trees_correct(self):
         threshold = 2
         self.clean = qtrees.clean(self.test_df, y_coord='latitude',
                                   x_coord='longitude')
         test_tree, test_samples = qtrees.get_results(self.moved_df,
                                                      threshold,
                                                      index='SampleID')
-
         pdt.assert_frame_equal(test_samples.sort_index(),
                                self.correct_dataframe.sort_index())
         self.assertEqual(test_tree.compare_subsets(self.correct_tree), 0.0)
