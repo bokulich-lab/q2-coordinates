@@ -1,9 +1,7 @@
-#!/usr/bin/env python
-
 # ----------------------------------------------------------------------------
-# Copyright (c) 2017--, QIIME 2 development team.
+# Copyright (c) 2020, QIIME 2 development team.
 #
-# Distributed under the terms of the Lesser GPL 3.0 licence.
+# Distributed under the terms of the Modified BSD License.
 #
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
@@ -22,11 +20,10 @@ from ._utilities import save_map, mapviz
 def autocorr(output_dir: str,
              distance_matrix: DistanceMatrix,
              metadata: qiime2.NumericMetadataColumn,
-             permutations: int=999,
-             two_tailed: bool=True,
-             transformation: str='R',
-             intersect_ids: bool=False) -> None:
-
+             permutations: int = 999,
+             two_tailed: bool = True,
+             transformation: str = 'R',
+             intersect_ids: bool = False) -> None:
     # match ids — metadata can be superset
     metadata = metadata.to_series()
     metadata, distance_matrix = match_ids(
@@ -86,7 +83,6 @@ def moran_plot(metadata, weights, transformation):
 
 def autocorr_from_dm(metadata, distance_matrix, permutations, two_tailed,
                      transformation):
-
     # convert distance_matrix to weights matrix
     weights = psw.util.full2W(distance_matrix.data, ids=distance_matrix.ids)
 

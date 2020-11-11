@@ -37,7 +37,7 @@ cd q2-coordinates/q2_coordinates/tests/data/
 
 qiime diversity alpha \
     --i-table even_table.qza \
-    --p-metric observed_otus \
+    --p-metric observed_features \
     --o-alpha-diversity alpha_diversity.qza
 
 qiime coordinates draw-map \
@@ -45,7 +45,7 @@ qiime coordinates draw-map \
     --m-metadata-file chardonnay_sample_metadata.txt \
     --p-latitude latitude \
     --p-longitude longitude \
-    --p-column observed_otus \
+    --p-column observed_features \
     --o-visualization diversity-map.qzv
 ```
 
@@ -110,7 +110,7 @@ Spatial autocorrelation measures the similarity of a measurement taken across sp
 qiime coordinates autocorr \
     --i-distance-matrix geodesic_distance_matrix.qza \
     --m-metadata-file alpha_diversity.qza \
-    --m-metadata-column observed_otus \
+    --m-metadata-column observed_features \
     --p-intersect-ids \
     --o-visualization autocorrelation.qzv
 ```

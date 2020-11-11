@@ -1,9 +1,7 @@
-#!/usr/bin/env python
-
 # ----------------------------------------------------------------------------
-# Copyright (c) 2017--, QIIME 2 development team.
+# Copyright (c) 2020, QIIME 2 development team.
 #
-# Distributed under the terms of the Lesser GPL 3.0 licence.
+# Distributed under the terms of the Modified BSD License.
 #
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
@@ -12,11 +10,9 @@ from setuptools import find_packages, setup
 
 setup(
     name='q2-coordinates',
-    version='2018.11',
+    version='2020.8.1.dev',
     license='BSD-3-Clause',
     packages=find_packages(),
-    install_requires=['biom-format', 'pandas', 'scipy', 'cartopy', 'numpy',
-                      'geopy', 'pysal'],
     author="Nicholas Bokulich",
     author_email="nbokulich@gmail.com",
     description=("Methods for geographic mapping of qiime2 artifact data or"

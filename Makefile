@@ -3,7 +3,7 @@
 all: ;
 
 lint:
-    q2lint
+	q2lint
 	flake8
 
 test: all
