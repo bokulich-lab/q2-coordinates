@@ -22,10 +22,13 @@ requirements:
     - biom-format
     - pandas
     - scipy
-    - cartopy==0.17
+    - cartopy==0.16
     - numpy
     - geopy
     - pysal
+    - scikit-bio
+    - q2templates {{ release }}.*
+    - q2-types {{ release }}.*
     - qiime2 {{ release }}.*
 
 test:
