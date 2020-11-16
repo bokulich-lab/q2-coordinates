@@ -29,7 +29,7 @@ class TestStats(CoordinatesTestPluginBase):
         alpha_fp = self.get_data_path('alpha_diversity.qza')
         alpha = qiime2.Artifact.load(alpha_fp)
         self.alpha = alpha.view(qiime2.Metadata) \
-            .get_column('observed_features')
+            .get_column('observed_otus')  # todo change to observed_features
 
     # does it run
     def test_autocorr(self):

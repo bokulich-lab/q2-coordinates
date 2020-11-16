@@ -21,6 +21,7 @@ requirements:
     - python {{ python }}
     - biom-format
     - pandas
+    - matplotlib=3.2
     - scipy
     - cartopy==0.16
     - numpy
