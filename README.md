@@ -38,10 +38,10 @@ cd q2-coordinates/q2_coordinates/tests/data/
 qiime diversity alpha \
     --i-table even_table.qza \
     --p-metric observed_features \
-    --o-alpha-diversity alpha_diversity.qza
+    --o-alpha-diversity alpha_diversity_sample.qza
 
 qiime coordinates draw-map \
-    --m-metadata-file alpha_diversity.qza \
+    --m-metadata-file alpha_diversity_sample.qza \
     --m-metadata-file chardonnay_sample_metadata.txt \
     --p-latitude latitude \
     --p-longitude longitude \
@@ -75,7 +75,7 @@ qiime coordinates geodesic-distance \
     --m-metadata-file chardonnay_sample_metadata.txt \
     --p-latitude latitude \
     --p-longitude longitude \
-    --o-distance-matrix geodesic_distance_matrix.qza
+    --o-distance-matrix geodesic_distance_matrix_sample.qza
 ```
 
 This computes geodesic distance (in meters) between each point. Note that samples with missing values are ignored.
@@ -87,7 +87,7 @@ qiime coordinates euclidean-distance \
     --p-x x \
     --p-y y \
     --p-z z \
-    --o-distance-matrix xyz_distance_matrix.qza.qza
+    --o-distance-matrix xyz_distance_matrix_sample.qza
 ```
 
 We can use these distance matrices for other useful QIIME 2 methods, e.g., to compute a mantel test comparing two different distance matrices. For example, we can compare Bray-Curtis dissimilarities between microbial communities to geospatial distances between our vineyard samples:
@@ -95,24 +95,24 @@ We can use these distance matrices for other useful QIIME 2 methods, e.g., to co
 qiime diversity beta \
     --i-table even_table.qza \
     --p-metric braycurtis \
-    --o-distance-matrix bray_curtis_distance.qza
+    --o-distance-matrix bray_curtis_distance_sample.qza
 
 qiime diversity mantel \
-    --i-dm1 geodesic_distance_matrix.qza \
-    --i-dm2 bray_curtis_distance.qza \
+    --i-dm1 geodesic_distance_matrix_sample.qza \
+    --i-dm2 bray_curtis_distance_sample.qza \
     --p-intersect-ids \
-    --o-visualization mantel.qzv
+    --o-visualization mantel_sample.qzv
 ```
 
 ## Computing autocorrelation statistics
 Spatial autocorrelation measures the similarity of a measurement taken across space. Correlations can be either positive, which indicates similar values in adjacent spaces, or negative, which indicates that dissimilar measurements are evenly arranged across space. In both cases, autocorrelation indicates that the observed pattern is non-random. We can compute [Moran's I](https://en.wikipedia.org/wiki/Moran%27s_I) and [Geary's C](https://en.wikipedia.org/wiki/Geary%27s_C) autocorrelation tests based on a spatial distance matrix using the `autocorr` visualizer.
 ```
 qiime coordinates autocorr \
-    --i-distance-matrix geodesic_distance_matrix.qza \
-    --m-metadata-file alpha_diversity.qza \
+    --i-distance-matrix geodesic_distance_matrix_sample.qza \
+    --m-metadata-file alpha_diversity_sample.qza \
     --m-metadata-column observed_features \
     --p-intersect-ids \
-    --o-visualization autocorrelation.qzv
+    --o-visualization autocorrelation_sample.qzv
 ```
 
 Moran's I ranges from -1 (negative spatial autocorrelation) to 1 (positive spatial autocorrelation); values near 0 or the expected I (EI, which approaches 0 with large sample sizes) indicate a random spatial distribution. Geary's C ranges from 0 (positive spatial autocorrelation) to some unspecified value greater than 1 (negative spatial autocorrelation); values near 1 indicate a random distribution. Both are global autocorrelation tests, though Geary's C is much more sensitive to local autocorrelation processes. The accompanying Moran plot shows the relationship between the variable of interest and its own spatial lag (i.e., the degree to which neighboring observations are autocorrelated).

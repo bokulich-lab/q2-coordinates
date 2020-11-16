@@ -27,7 +27,7 @@ class TestMapper(CoordinatesTestPluginBase):
         coordinates.actions.draw_map(
             metadata=self.sample_md.merge(self.alpha.view(qiime2.Metadata)),
             latitude='latitude', longitude='longitude',
-            column='observed_otus')
+            column='observed_features')
 
     def test_draw_map_from_sample_metadata(self):
         coordinates.actions.draw_map(
