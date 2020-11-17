@@ -117,7 +117,7 @@ def mapviz(output_dir, results=None, title='Coordinates'):
         'results': results,
         'title': title})
 
-def save_animated_map(output_dir, lat_min, lat_max, data, column, fig):
+def save_animated_map(output_dir, lat_min, lat_max, data, column):
     # save fig, which is really a legend
     plt.savefig(join(output_dir, 'colorbar.png'), bbox_inches='tight')
     # copy all js/css utilities

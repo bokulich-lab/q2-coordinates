@@ -116,14 +116,13 @@ def draw_map(output_dir: str,
 
 
 def draw_interactive_map(output_dir: str,
-             metadata: qiime2.Metadata,
-             column: str=None,
-             latitude: str='Latitude',
-             longitude: str='Longitude',
-             image: str='StamenTerrain',
-             color_palette: str='rainbow',
-             discrete: bool=False,
-             missing_data: str='error'):
+                         metadata: qiime2.Metadata,
+                         column: str=None,
+                         latitude: str='Latitude',
+                         longitude: str='Longitude',
+                         color_palette: str='rainbow',
+                         discrete: bool=False,
+                         missing_data: str='error'):
 
     metadata = _load_and_validate(
         metadata, [column, latitude, longitude],
@@ -131,7 +130,7 @@ def draw_interactive_map(output_dir: str,
 
     lat_0, lat_1, lon_0, lon_1 = get_max_extent(
         metadata[latitude], metadata[longitude])
-    lat_min, lat_max = [lon_0, lat_0], [lon_1, lat_1]
+    loc_min, loc_max = [lon_0, lat_0], [lon_1, lat_1]
 
     cmap = plt.get_cmap(color_palette)
 
@@ -186,4 +185,4 @@ def draw_interactive_map(output_dir: str,
         ax.set_ylim(0, idx + 2)
         ax.axis('off')
 
-    save_animated_map(output_dir, lat_min, lat_max, data, column, fig)
+    save_animated_map(output_dir, loc_min, loc_max, data, column, fig)
