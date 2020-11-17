@@ -26,6 +26,7 @@ requirements:
     - cartopy==0.16
     - numpy
     - geopy
+    - dill
     - pysal==2.0
     - scikit-bio
     - q2templates {{ release }}.*

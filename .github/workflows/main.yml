@@ -7,7 +7,7 @@ on:
       - master
   push:
     branches:
-      - include_ci_w_gha # todo change to master after testing
+      - master
 
 jobs:
   lint:

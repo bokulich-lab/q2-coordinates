@@ -21,11 +21,16 @@ conda activate q2coord
 
 conda install \
   -c conda-forge -c bioconda -c qiime2 -c defaults \
-  qiime2 q2cli q2templates q2-types q2-diversity scikit-bio "pysal==2.0" geopy numpy "cartopy==0.16" scipy "matplotlib=3.2" pandas biom-format
+  qiime2 q2cli q2templates q2-types q2-diversity scikit-bio "pysal==2.0" geopy numpy "cartopy==0.16" scipy \
+  "matplotlib=3.2" pandas biom-format dill
 ```
 Now install q2-coordinates:
 ```
 pip install git+https://github.com/nbokulich/q2-coordinates.git 
+```
+To avoid warnings about geopandas you can additionally install it as:
+```
+pip install geopandas
 ```
 
 # Examples
