@@ -1,13 +1,6 @@
 name: ci
 
-# build on every PR and commit to master
-on:
-  pull_request:
-    branches:
-      - master
-  push:
-    branches:
-      - master
+on: [push, pull_request]
 
 jobs:
   lint:
