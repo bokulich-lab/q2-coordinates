@@ -14,17 +14,23 @@ Currently, StamenTerrain, Open Street Maps, and Google Maps are supported, produ
 Map projections are quick for small maps, but may take several minutes for very large maps (e.g., trans-continental).
 
 # Install
-Note: Map-drawing functions in q2-coordinates require you to install [cartopy](https://github.com/SciTools/cartopy) (note: cartopy is distibuted under a LGPL-3.0 license).
+We recommend using the functonalities in a conda environment with the required dependencies installed within: 
 ```
-conda install -c conda-forge cartopy
+conda create -y -n q2coord
+conda activate q2coord
+
+conda install \
+  -c conda-forge -c bioconda -c qiime2 -c defaults \
+  qiime2 q2cli q2templates q2-types q2-diversity scikit-bio "pysal==2.0" geopy numpy "cartopy==0.16" scipy \
+  "matplotlib=3.2" pandas biom-format dill
 ```
 Now install q2-coordinates:
 ```
-pip install https://github.com/nbokulich/q2-coordinates/archive/master.zip
+pip install git+https://github.com/nbokulich/q2-coordinates.git 
 ```
-q2-coordinates requires >= pysal 2.0. If this is not installed properly by the command above, install as follows:
+To avoid warnings about geopandas you can additionally install it as:
 ```
-pip install pysal==2.0rc2
+pip install geopandas
 ```
 
 # Examples
@@ -32,20 +38,26 @@ In the examples below we will use some bacterial 16S rRNA gene amplicon sequence
 
 ## Plotting geocoordinates colored by alpha diversity values
 This visualizer takes a SampleData[AlphaDiversity] artifact and sample metadata TSV as input, and plots sample coordinates on the built-in maps. Sample points are colored as a function of alpha diversity values.
-```
-cd q2-coordinates/q2_coordinates/tests/data/
 
+Clone into repository and get access to the test data:
+```
+git clone https://github.com/nbokulich/q2-coordinates.git
+
+cd q2-coordinates/q2_coordinates/tests/data/
+```
+Draw map of alpha diversity values:
+```
 qiime diversity alpha \
     --i-table even_table.qza \
-    --p-metric observed_otus \
-    --o-alpha-diversity alpha_diversity.qza
+    --p-metric observed_features \
+    --o-alpha-diversity alpha_diversity_sample.qza
 
 qiime coordinates draw-map \
-    --m-metadata-file alpha_diversity.qza \
+    --m-metadata-file alpha_diversity_sample.qza \
     --m-metadata-file chardonnay_sample_metadata.txt \
     --p-latitude latitude \
     --p-longitude longitude \
-    --p-column observed_otus \
+    --p-column observed_features \
     --o-visualization diversity-map.qzv
 ```
 
@@ -75,7 +87,7 @@ qiime coordinates geodesic-distance \
     --m-metadata-file chardonnay_sample_metadata.txt \
     --p-latitude latitude \
     --p-longitude longitude \
-    --o-distance-matrix geodesic_distance_matrix.qza
+    --o-distance-matrix geodesic_distance_matrix_sample.qza
 ```
 
 This computes geodesic distance (in meters) between each point. Note that samples with missing values are ignored.
@@ -87,7 +99,7 @@ qiime coordinates euclidean-distance \
     --p-x x \
     --p-y y \
     --p-z z \
-    --o-distance-matrix xyz_distance_matrix.qza.qza
+    --o-distance-matrix xyz_distance_matrix_sample.qza
 ```
 
 We can use these distance matrices for other useful QIIME 2 methods, e.g., to compute a mantel test comparing two different distance matrices. For example, we can compare Bray-Curtis dissimilarities between microbial communities to geospatial distances between our vineyard samples:
@@ -95,24 +107,27 @@ We can use these distance matrices for other useful QIIME 2 methods, e.g., to co
 qiime diversity beta \
     --i-table even_table.qza \
     --p-metric braycurtis \
-    --o-distance-matrix bray_curtis_distance.qza
+    --o-distance-matrix bray_curtis_distance_sample.qza
 
 qiime diversity mantel \
-    --i-dm1 geodesic_distance_matrix.qza \
-    --i-dm2 bray_curtis_distance.qza \
+    --i-dm1 geodesic_distance_matrix_sample.qza \
+    --i-dm2 bray_curtis_distance_sample.qza \
     --p-intersect-ids \
-    --o-visualization mantel.qzv
+    --o-visualization mantel_sample.qzv
 ```
 
 ## Computing autocorrelation statistics
 Spatial autocorrelation measures the similarity of a measurement taken across space. Correlations can be either positive, which indicates similar values in adjacent spaces, or negative, which indicates that dissimilar measurements are evenly arranged across space. In both cases, autocorrelation indicates that the observed pattern is non-random. We can compute [Moran's I](https://en.wikipedia.org/wiki/Moran%27s_I) and [Geary's C](https://en.wikipedia.org/wiki/Geary%27s_C) autocorrelation tests based on a spatial distance matrix using the `autocorr` visualizer.
 ```
 qiime coordinates autocorr \
-    --i-distance-matrix geodesic_distance_matrix.qza \
-    --m-metadata-file alpha_diversity.qza \
-    --m-metadata-column observed_otus \
+    --i-distance-matrix geodesic_distance_matrix_sample.qza \
+    --m-metadata-file alpha_diversity_sample.qza \
+    --m-metadata-column observed_features \
     --p-intersect-ids \
-    --o-visualization autocorrelation.qzv
+    --o-visualization autocorrelation_sample.qzv
 ```
 
 Moran's I ranges from -1 (negative spatial autocorrelation) to 1 (positive spatial autocorrelation); values near 0 or the expected I (EI, which approaches 0 with large sample sizes) indicate a random spatial distribution. Geary's C ranges from 0 (positive spatial autocorrelation) to some unspecified value greater than 1 (negative spatial autocorrelation); values near 1 indicate a random distribution. Both are global autocorrelation tests, though Geary's C is much more sensitive to local autocorrelation processes. The accompanying Moran plot shows the relationship between the variable of interest and its own spatial lag (i.e., the degree to which neighboring observations are autocorrelated).
+
+# License
+q2-coordinates is released under a BSD-3-Clause license. See LICENSE for more details.

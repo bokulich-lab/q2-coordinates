@@ -1,9 +1,7 @@
-#!/usr/bin/env python
-
 # ----------------------------------------------------------------------------
-# Copyright (c) 2017--, QIIME 2 development team.
+# Copyright (c) 2020, QIIME 2 development team.
 #
-# Distributed under the terms of the Lesser GPL 3.0 licence.
+# Distributed under the terms of the Modified BSD License.
 #
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
@@ -30,10 +28,9 @@ from ._utilities import (plot_basemap,
 
 
 def geodesic_distance(metadata: qiime2.Metadata,
-                      latitude: str='Latitude',
-                      longitude: str='Longitude',
-                      missing_data: str='error') -> DistanceMatrix:
-
+                      latitude: str = 'Latitude',
+                      longitude: str = 'Longitude',
+                      missing_data: str = 'error') -> DistanceMatrix:
     sample_md = _load_and_validate(
         metadata, [latitude, longitude], ['latitude', 'longitude'],
         missing_data=missing_data)
@@ -54,9 +51,8 @@ def geodesic_distance(metadata: qiime2.Metadata,
 def euclidean_distance(metadata: qiime2.Metadata,
                        x: str,
                        y: str,
-                       z: str=None,
-                       missing_data: str='error') -> DistanceMatrix:
-
+                       z: str = None,
+                       missing_data: str = 'error') -> DistanceMatrix:
     cols = [x, y]
     names = ['x', 'y']
     if z is not None:
@@ -76,14 +72,13 @@ def euclidean_distance(metadata: qiime2.Metadata,
 
 def draw_map(output_dir: str,
              metadata: qiime2.Metadata,
-             column: str=None,
-             latitude: str='Latitude',
-             longitude: str='Longitude',
-             image: str='StamenTerrain',
-             color_palette: str='rainbow',
-             discrete: bool=False,
-             missing_data: str='error'):
-
+             column: str = None,
+             latitude: str = 'Latitude',
+             longitude: str = 'Longitude',
+             image: str = 'StamenTerrain',
+             color_palette: str = 'rainbow',
+             discrete: bool = False,
+             missing_data: str = 'error'):
     metadata = _load_and_validate(
         metadata, [column, latitude, longitude],
         ['column', 'latitude', 'longitude'], missing_data)

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
-# Copyright (c) 2017--, QIIME 2 development team.
+# Copyright (c) 2020, QIIME 2 development team.
 #
-# Distributed under the terms of the Lesser GPL 3.0 licence.
+# Distributed under the terms of the Modified BSD License.
 #
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
@@ -26,7 +26,8 @@ class TestMapper(CoordinatesTestPluginBase):
     def test_draw_map_from_alpha_diversity_vector(self):
         coordinates.actions.draw_map(
             metadata=self.sample_md.merge(self.alpha.view(qiime2.Metadata)),
-            latitude='latitude', longitude='longitude', column='observed_otus')
+            latitude='latitude', longitude='longitude',
+            column='observed_features')
 
     def test_draw_map_from_sample_metadata(self):
         coordinates.actions.draw_map(
