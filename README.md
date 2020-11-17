@@ -14,17 +14,18 @@ Currently, StamenTerrain, Open Street Maps, and Google Maps are supported, produ
 Map projections are quick for small maps, but may take several minutes for very large maps (e.g., trans-continental).
 
 # Install
-Note: Map-drawing functions in q2-coordinates require you to install [cartopy](https://github.com/SciTools/cartopy) (note: cartopy is distibuted under a LGPL-3.0 license).
+We recommend using the functonalities in a conda environment with the required dependencies installed within: 
 ```
-conda install -c conda-forge cartopy
+conda create -y -n q2coord
+conda activate q2coord
+
+conda install \
+  -c conda-forge -c bioconda -c qiime2 -c defaults \
+  qiime2 q2cli q2templates q2-types q2-diversity scikit-bio "pysal==2.0" geopy numpy "cartopy==0.16" scipy "matplotlib=3.2" pandas biom-format
 ```
 Now install q2-coordinates:
 ```
-pip install https://github.com/nbokulich/q2-coordinates/archive/master.zip
-```
-q2-coordinates requires >= pysal 2.0. If this is not installed properly by the command above, install as follows:
-```
-pip install pysal==2.0rc2
+pip install git+https://github.com/nbokulich/q2-coordinates.git 
 ```
 
 # Examples
@@ -32,9 +33,15 @@ In the examples below we will use some bacterial 16S rRNA gene amplicon sequence
 
 ## Plotting geocoordinates colored by alpha diversity values
 This visualizer takes a SampleData[AlphaDiversity] artifact and sample metadata TSV as input, and plots sample coordinates on the built-in maps. Sample points are colored as a function of alpha diversity values.
-```
-cd q2-coordinates/q2_coordinates/tests/data/
 
+Clone into repository and get access to the test data:
+```
+git clone https://github.com/nbokulich/q2-coordinates.git
+
+cd q2-coordinates/q2_coordinates/tests/data/
+```
+Draw map of alpha diversity values:
+```
 qiime diversity alpha \
     --i-table even_table.qza \
     --p-metric observed_features \
@@ -116,3 +123,6 @@ qiime coordinates autocorr \
 ```
 
 Moran's I ranges from -1 (negative spatial autocorrelation) to 1 (positive spatial autocorrelation); values near 0 or the expected I (EI, which approaches 0 with large sample sizes) indicate a random spatial distribution. Geary's C ranges from 0 (positive spatial autocorrelation) to some unspecified value greater than 1 (negative spatial autocorrelation); values near 1 indicate a random distribution. Both are global autocorrelation tests, though Geary's C is much more sensitive to local autocorrelation processes. The accompanying Moran plot shows the relationship between the variable of interest and its own spatial lag (i.e., the degree to which neighboring observations are autocorrelated).
+
+# License
+q2-coordinates is released under a BSD-3-Clause license. See LICENSE for more details.
