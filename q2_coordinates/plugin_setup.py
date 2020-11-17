@@ -95,8 +95,6 @@ plugin.visualizers.register_function(
                     'viridis', 'plasma', 'inferno', 'magma', 'terrain',
                     'rainbow']),
                 'discrete': Bool,
-                'image': Str % Choices(
-                    ['StamenTerrain', 'OSM', 'GoogleTiles']),
                 },
     input_descriptions={},
     parameter_descriptions={
