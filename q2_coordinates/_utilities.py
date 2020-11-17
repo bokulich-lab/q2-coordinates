@@ -8,7 +8,6 @@
 
 
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatch
 import cartopy.crs as ccrs
 from cartopy.io.img_tiles import StamenTerrain, OSM, GoogleTiles
 import math
@@ -116,6 +115,7 @@ def mapviz(output_dir, results=None, title='Coordinates'):
     q2templates.render(index, output_dir, context={
         'results': results,
         'title': title})
+
 
 def save_animated_map(output_dir, lat_min, lat_max, data, column):
     # save fig, which is really a legend
