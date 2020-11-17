@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
-# Copyright (c) 2017--, QIIME 2 development team.
+# Copyright (c) 2020, QIIME 2 development team.
 #
-# Distributed under the terms of the Lesser GPL 3.0 licence.
+# Distributed under the terms of the Modified BSD License.
 #
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
@@ -28,7 +28,8 @@ class TestStats(CoordinatesTestPluginBase):
         self.dm = qiime2.Artifact.load(dm_fp)
         alpha_fp = self.get_data_path('alpha_diversity.qza')
         alpha = qiime2.Artifact.load(alpha_fp)
-        self.alpha = alpha.view(qiime2.Metadata).get_column('observed_otus')
+        self.alpha = alpha.view(qiime2.Metadata) \
+            .get_column('observed_features')
 
     # does it run
     def test_autocorr(self):
@@ -54,11 +55,13 @@ class TestStats(CoordinatesTestPluginBase):
     def test_autocorr_from_dm(self):
         np.random.seed(124)
         exp = pd.DataFrame(
-            {'Moran\'s I':
-                [-0.00975936992946, -0.0909090909091, 1.08994430817,
-                 0.275737677144],
-             'Geary\'s C':
-                [0.715863556271, 1.0, -1.32713928249, 0.0922313064718]},
+            {
+                'Moran\'s I':
+                    [-0.00975936992946, -0.0909090909091, 1.08994430817,
+                     0.275737677144],
+                'Geary\'s C':
+                    [0.715863556271, 1.0, -1.32713928249, 0.0922313064718]
+            },
             index=['Test Statistic', 'Expected Value', 'Z norm', 'p norm'])
         distance_matrix = self.dm.view(DistanceMatrix)
         metadata = self.alpha.to_series()
