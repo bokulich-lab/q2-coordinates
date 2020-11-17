@@ -117,12 +117,12 @@ def draw_map(output_dir: str,
 
 def draw_interactive_map(output_dir: str,
                          metadata: qiime2.Metadata,
-                         column: str=None,
-                         latitude: str='Latitude',
-                         longitude: str='Longitude',
-                         color_palette: str='rainbow',
-                         discrete: bool=False,
-                         missing_data: str='error'):
+                         column: str = None,
+                         latitude: str = 'Latitude',
+                         longitude: str = 'Longitude',
+                         color_palette: str = 'rainbow',
+                         discrete: bool = False,
+                         missing_data: str = 'error'):
 
     metadata = _load_and_validate(
         metadata, [column, latitude, longitude],
