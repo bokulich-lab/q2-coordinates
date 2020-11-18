@@ -73,8 +73,8 @@ class BasicTest(unittest.TestCase):
                        'test_id_na': ["", ""]}
 
         to_clean_dataframe = pd.DataFrame.from_dict(
-	     unclean_dic,
-	     orient='index',
+             unclean_dic,
+             orient='index',
              columns=['longitude', 'latitude'])
         to_clean_dataframe.index.name = self.index
 
