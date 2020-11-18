@@ -43,6 +43,17 @@ class TestMapper(CoordinatesTestPluginBase):
         dm = dm.view(DistanceMatrix)
         np.testing.assert_array_almost_equal(dm.data, exp.data, decimal=3)
 
+    def test_draw_interactive_map_from_alpha_diversity_vector(self):
+        coordinates.actions.draw_interactive_map(
+            metadata=self.sample_md.merge(self.alpha.view(qiime2.Metadata)),
+            latitude='latitude', longitude='longitude',
+            column='observed_features')
+
+    def test_draw_interactive_map_from_sample_metadata(self):
+        coordinates.actions.draw_interactive_map(
+            metadata=self.sample_md, latitude='latitude',
+            longitude='longitude', column='vineyard', discrete=True)
+
 
 class TestCoordMethods(CoordinatesTestPluginBase):
 

@@ -5,16 +5,16 @@
 
 A qiime2 plugin supporting methods for geographic mapping of qiime2 artifact data or metadata.
 
-q2-coordinates makes it easy to plot geographic coordinates and associated (meta)data on beautiful topographic and street maps.
+q2-coordinates makes it easy to plot geographic coordinates and associated (meta)data on beautiful topographic, street maps or interactive geographical maps.
 
 Map tiling, resolution calculation, and coordinate projection occur automatically. All the user needs to do is input a two-dimensional list of geocoordinates to plot, in decimal degrees, as shown in the examples below.
 
-Currently, StamenTerrain, Open Street Maps, and Google Maps are supported, producing high-quality maps from anywhere on planet Earth.
+Currently, StamenTerrain, Open Street Maps, Google Maps and OpenLayers are supported, producing high-quality maps from anywhere on planet Earth.
 
 Map projections are quick for small maps, but may take several minutes for very large maps (e.g., trans-continental).
 
 # Install
-We recommend using the functonalities in a conda environment with the required dependencies installed within: 
+We recommend using the functonalities in a conda environment with the required dependencies installed within:
 ```
 conda create -y -n q2coord
 conda activate q2coord
@@ -26,7 +26,7 @@ conda install \
 ```
 Now install q2-coordinates:
 ```
-pip install git+https://github.com/nbokulich/q2-coordinates.git 
+pip install git+https://github.com/nbokulich/q2-coordinates.git
 ```
 To avoid warnings about geopandas you can additionally install it as:
 ```
@@ -62,6 +62,17 @@ qiime coordinates draw-map \
 ```
 
 ![Alt text](./examples/alpha-diversity.jpg?raw=true "coordinates colored by observed species")
+
+Draw interactive map of alpha diversity values:
+```
+qiime coordinates draw-interactive-map \
+    --m-metadata-file alpha_diversity_sample.qza \
+    --m-metadata-file chardonnay_sample_metadata.txt \
+    --p-latitude latitude \
+    --p-longitude longitude \
+    --p-column observed_features \
+    --o-visualization diversity-interactive-map.qzv
+```
 
 Note that _any_ metadata-transformable artifacts can be used as a `metadata-file` input to this command, so this opens the door to many other data types, e.g., PCoA results, predictions, etc.
 

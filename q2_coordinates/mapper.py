@@ -185,4 +185,4 @@ def draw_interactive_map(output_dir: str,
         ax.set_ylim(0, idx + 2)
         ax.axis('off')
 
-    save_animated_map(output_dir, loc_min, loc_max, data, column, fig)
+    save_animated_map(output_dir, loc_min, loc_max, data, column)
