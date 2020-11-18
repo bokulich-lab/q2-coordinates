@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  q2-coordinates : {{ title }}
+{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="static/css/ol.css" type="text/css">
+
+  <script src="static/js/ol.js"></script>
+
+  <style>
+    #map-canvas {
+      width: 100%;
+      height: 700px;
+    }
+    #map-canvas-popup-content {
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    .ol-popup {
+      position: absolute;
+      background-color: white;
+      -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+      filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #cccccc;
+      bottom: 12px;
+      left: -50px;
+      min-width: 180px;
+    }
+    .ol-popup:after, .ol-popup:before {
+      top: 100%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+    }
+    .ol-popup:after {
+      border-top-color: white;
+      border-width: 10px;
+      left: 48px;
+      margin-left: -10px;
+    }
+    .ol-popup:before {
+      border-top-color: #cccccc;
+      border-width: 11px;
+      left: 48px;
+      margin-left: -11px;
+    }
+    .ol-popup-closer {
+      text-decoration: none;
+      position: absolute;
+      top: 2px;
+      right: 8px;
+    }
+    .ol-popup-closer:after {
+      content: "✖";
+    }
+  </style>
+
+  <script type="text/javascript">
+    $( document ).ready(function() {
+      var data = {{data}};
+      var column = '{{column}}';
+
+      var iconFeatures = [];
+      $.each(data, function( i, vals ) {
+        var iconFeature = new ol.Feature({
+          geometry: new ol.geom.Point(ol.proj.transform([vals['longitude'], vals['latitude']], 'EPSG:4326', 'EPSG:3857')),
+          info: {'sample_id': vals['sample_id'], '{{column}}': vals[column]},
+        });
+        var style = new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 8,
+            fill: new ol.style.Fill({color: vals['color']}),
+            stroke: new ol.style.Stroke({color: '#333333', width: 2})
+          })
+        });
+        iconFeature.setStyle(style);
+        iconFeatures.push(iconFeature);
+      });
+      var vectorSource = new ol.source.Vector({ features: iconFeatures });
+      var vectorLayer = new ol.layer.Vector({ source: vectorSource });
+
+      var map = new ol.Map({
+        target: 'map-canvas',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLayer
+        ],
+        keyboardEventTarget: document,
+        controls: ol.control.defaults().extend([new ol.control.ZoomSlider()]),
+      });
+
+      var coordMin = ol.proj.fromLonLat({{lat_min}}, 'EPSG:3857');
+      var coordMax = ol.proj.fromLonLat({{lat_max}}, 'EPSG:3857');
+      var extent = [coordMin[0], coordMin[1], coordMax[0], coordMax[1]];
+      map.getView().fit(extent, map.getSize());
+
+      // adding popup to map
+      var closer = document.getElementById('map-canvas-popup-closer');
+      closer.onclick = function() {
+        overlay.setPosition(undefined);
+        closer.blur();
+        return false;
+      };
+      var container = document.getElementById('map-canvas-popup');
+      var overlay = new ol.Overlay({
+        element: container,
+        positioning: 'bottom-center',
+        autoPan: true,
+        offset: [0, 0],
+        autoPanAnimation: {
+          duration: 250
+        }
+      });
+      map.addOverlay(overlay);
+      map.on('click', function(evt) {
+        var features = []
+        map.forEachFeatureAtPixel(evt.pixel,
+          function(feature) {
+            features.push(feature)
+          });
+
+        if (features) {
+          var coordinates = features[0].getGeometry().getCoordinates();
+          var content = document.getElementById('map-canvas-popup-content');
+          var text = '';
+
+          $.each(features, function( i, feature ) {
+            var info = feature.get('info');
+            var j = i + 1;
+            if (features.length > 1) {
+              text += '<b>' + j + '/' + features.length + '. ' + info['sample_id'] + '</b></br>';
+            } else {
+              text += '<b>' + info['sample_id'] + '</b></br>';
+            }
+            text += column + ': ' + info['{{column}}'] + '<br/>';
+          });
+          content.innerHTML = text;
+          overlay.setPosition(coordinates);
+        }
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+  <table width="100%">
+    <tr>
+      <td width="80%">
+        <div id="map-canvas"></div>
+      </td>
+      <td>
+        <img src="colorbar.png">
+      </td>
+    </tr>
+  </table>
+
+  <div id="map-canvas-popup" class="ol-popup">
+    <a href="#" id="map-canvas-popup-closer" class="ol-popup-closer"></a>
+    <div id="map-canvas-popup-content"></div>
+  </div>
+{% endblock %}

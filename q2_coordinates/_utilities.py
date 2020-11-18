@@ -14,6 +14,8 @@ import math
 from os.path import join
 import pkg_resources
 import q2templates
+from shutil import copytree
+from functools import partial
 
 
 TEMPLATES = pkg_resources.resource_filename('q2_coordinates', 'assets')
@@ -113,3 +115,16 @@ def mapviz(output_dir, results=None, title='Coordinates'):
     q2templates.render(index, output_dir, context={
         'results': results,
         'title': title})
+
+
+def save_animated_map(output_dir, lat_min, lat_max, data, column):
+    # save fig, which is really a legend
+    plt.savefig(join(output_dir, 'colorbar.png'), bbox_inches='tight')
+    # copy all js/css utilities
+    in_path = partial(join, TEMPLATES, 'animated_map')
+    copytree(in_path('static'),
+             join(output_dir, 'static'))
+    # save template
+    q2templates.render(in_path('index.html'), output_dir, context={
+        'lat_min': lat_min, 'lat_max': lat_max, 'data': data,
+        'column': column})
