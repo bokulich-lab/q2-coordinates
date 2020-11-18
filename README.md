@@ -160,6 +160,7 @@ Quadtrees can easily be visualized using a mix of python and other existing qiim
 2. using q2-empress to view and navigate the tree to see number and size of splits.
 
         #### in python
+	```
         import qiime2
         import skbio
         ar = qiime2.Artifact.load('test\tree.qza')
@@ -169,7 +170,7 @@ Quadtrees can easily be visualized using a mix of python and other existing qiim
                 node.length = 1.0
         new_ar = qiime2.Artifact.import_data('Phylogeny[Rooted]', tree)
         new_ar.save('test\new_tree.qza')
-
+	```
         #### then using qiime2 cli
         ```
             qiime empress tree-plot \
