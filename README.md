@@ -1,14 +1,11 @@
-#q2-coordinates
+# q2-coordinates
 
 [![Build Status](https://travis-ci.org/nbokulich/q2-coordinates.svg?branch=master)](https://travis-ci.org/nbokulich/q2-coordinates) [![Coverage Status](https://coveralls.io/repos/github/nbokulich/q2-coordinates/badge.svg?branch=master)](https://coveralls.io/github/nbokulich/q2-coordinates?branch=master) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2124295.svg)](https://doi.org/10.5281/zenodo.2124295)
 
 
 A qiime2 plugin supporting methods for geographic mapping of qiime2 artifact data or metadata. 
-<<<<<<< HEAD
-=======
 
 Quadtree functionality allows the user to objectively partition a dataset based on x and y coordinate information (for example, longitude and latitude).
->>>>>>> b1548e1eb0fbb16c7cbe967a52c05ecec9bf86c9
 
 Quadtree functionality allows the user to objectively partition a dataset based on x and y coordinate information (for example, longitude and latitude).
 
@@ -165,8 +162,7 @@ Quadtrees can easily be visualized using a mix of python and other existing qiim
 2. using q2-empress to view and navigate the tree to see number and size of splits.
 
 
-        #### in python
-	```
+#### in python
         import qiime2
         import skbio
         ar = qiime2.Artifact.load('test\tree.qza')
@@ -176,14 +172,11 @@ Quadtrees can easily be visualized using a mix of python and other existing qiim
                 node.length = 1.0
         new_ar = qiime2.Artifact.import_data('Phylogeny[Rooted]', tree)
         new_ar.save('test\new_tree.qza')
-	```
-        #### then using qiime2 cli
-        ```
+#### then using qiime2 cli
             qiime empress tree-plot \
             --i-tree test\new_tree.qza \
             --m-feature-metadata-file q2_coordinates/tests/data/chardonnay_sample_metadata.txt \
             --output-dir empress
-        ```
 
 # License
 q2-coordinates is released under a BSD-3-Clause license. See LICENSE for more details.
