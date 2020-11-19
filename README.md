@@ -4,6 +4,11 @@
 
 
 A qiime2 plugin supporting methods for geographic mapping of qiime2 artifact data or metadata. 
+<<<<<<< HEAD
+=======
+
+Quadtree functionality allows the user to objectively partition a dataset based on x and y coordinate information (for example, longitude and latitude).
+>>>>>>> b1548e1eb0fbb16c7cbe967a52c05ecec9bf86c9
 
 Quadtree functionality allows the user to objectively partition a dataset based on x and y coordinate information (for example, longitude and latitude).
 
@@ -159,6 +164,7 @@ Quadtrees can easily be visualized using a mix of python and other existing qiim
 1. using q2-coordinates draw map to disply the sample positions and color code them by respective quadrant (i.e: set the "column" parameter to the split-depth you want to look at)
 2. using q2-empress to view and navigate the tree to see number and size of splits.
 
+
         #### in python
 	```
         import qiime2
@@ -181,4 +187,3 @@ Quadtrees can easily be visualized using a mix of python and other existing qiim
 
 # License
 q2-coordinates is released under a BSD-3-Clause license. See LICENSE for more details.
-=======
