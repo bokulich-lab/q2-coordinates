@@ -8,9 +8,8 @@
 
 import pandas as pd
 import qiime2
-
 from .plugin_setup import plugin
-from ._format import CoordinatesFormat
+from ._format import CoordinatesFormat, QuadTreeFormat
 
 
 def _read_dataframe(fh):
@@ -37,5 +36,31 @@ def _2(ff: CoordinatesFormat) -> (pd.DataFrame):
 
 @plugin.register_transformer
 def _3(ff: CoordinatesFormat) -> (qiime2.Metadata):
+    with ff.open() as fh:
+        return qiime2.Metadata(_read_dataframe(fh))
+
+
+def _read_quad_trees(fh):
+    df = pd.read_csv(fh, sep='\t', header=0, dtype=object, index_col=0)
+    return df
+
+
+@plugin.register_transformer
+def _4(data: pd.DataFrame) -> QuadTreeFormat:
+    ff = QuadTreeFormat()
+    with ff.open() as fh:
+        data.to_csv(fh, sep='\t', header=True, index=True)
+    return ff
+
+
+@plugin.register_transformer
+def _5(ff: QuadTreeFormat) -> pd.DataFrame:
+    with ff.open() as fh:
+        df = _read_quad_trees(fh)
+        return df
+
+
+@plugin.register_transformer
+def _6(ff: QuadTreeFormat) -> qiime2.Metadata:
     with ff.open() as fh:
         return qiime2.Metadata(_read_dataframe(fh))

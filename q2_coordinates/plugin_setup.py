@@ -15,10 +15,12 @@ import q2_coordinates
 import importlib
 from q2_types.sample_data import SampleData
 from q2_types.distance_matrix import DistanceMatrix
-from ._format import (CoordinatesFormat, CoordinatesDirectoryFormat)
-from ._type import (Coordinates)
+from q2_types.tree import Phylogeny, Rooted
+from ._format import (CoordinatesFormat, CoordinatesDirectoryFormat,
+                      QuadTreeFormat, QuadTreeDirectoryFormat)
+from ._type import (Coordinates, QuadTree)
 from .stats import autocorr
-
+from .qtrees import quadtree
 
 citations = Citations.load('citations.bib', package='q2_coordinates')
 
@@ -184,7 +186,33 @@ plugin.visualizers.register_function(
     citations=[citations['Moran'], citations['Geary']]
 )
 
+plugin.methods.register_function(
+    function=quadtree,
+    inputs={},
+    parameters={'metadata': Metadata,
+                'threshold': Int,
+                'x_coord': Str,
+                'y_coord': Str},
+    outputs=[('output_tree', Phylogeny[Rooted]),
+             ('output_table', SampleData[QuadTree])],
+    input_descriptions={},
+    parameter_descriptions={
+        'metadata': 'The sample metadata containing coordinate data.',
+        'threshold': 'The amount of samples which constitutes the "bin" size.'
+                     'If there are more samples than this number the tree will'
+                     'divide itself again. If there is fewer than this number '
+                     'of samples in a bin the tree will not subdivide again.',
+        'x_coord': 'Metadata column containing x coordinates, i.e. longitude.',
+        'y_coord': 'Metadata column containing y coordinates, i.e. latitude'},
+    name='Divide samples into bins by quadtrees based on'
+         'x and y coordinates',
+    description='Objective binning of samples based on spatial data '
+                'by quadtrees. While there are samples '
+                '(greater than the threshold) in a partition '
+                'that partition will split into four allowing for quick '
+                'binning based both on location and sample density.',
 
+)
 # Registrations
 plugin.register_formats(CoordinatesFormat, CoordinatesDirectoryFormat)
 
@@ -194,4 +222,11 @@ plugin.register_semantic_type_to_format(
     SampleData[Coordinates],
     artifact_format=CoordinatesDirectoryFormat)
 
+plugin.register_formats(QuadTreeFormat, QuadTreeDirectoryFormat)
+
+plugin.register_semantic_types(QuadTree)
+
+plugin.register_semantic_type_to_format(
+    SampleData[QuadTree],
+    artifact_format=QuadTreeDirectoryFormat)
 importlib.import_module('q2_coordinates._transformer')
