@@ -161,22 +161,13 @@ Quadtrees can easily be visualized using a mix of python and other existing qiim
 1. using q2-coordinates draw map to disply the sample positions and color code them by respective quadrant (i.e: set the "column" parameter to the split-depth you want to look at)
 2. using q2-empress to view and navigate the tree to see number and size of splits.
 
-
-#### in python
-        import qiime2
-        import skbio
-        ar = qiime2.Artifact.load('test\tree.qza')
-        tree = ar.view(skbio.TreeNode)
-        for node in tree.traverse():
-            if node.length is None:
-                node.length = 1.0
-        new_ar = qiime2.Artifact.import_data('Phylogeny[Rooted]', tree)
-        new_ar.save('test\new_tree.qza')
-#### then using qiime2 cli
-            qiime empress tree-plot \
-            --i-tree test\new_tree.qza \
-            --m-feature-metadata-file q2_coordinates/tests/data/chardonnay_sample_metadata.txt \
-            --output-dir empress
+```
+using qiime2 cli
+    qiime empress tree-plot \
+    --i-tree test/output_tree.qza \
+    --m-feature-metadata-file q2_coordinates/tests/data/chardonnay_sample_metadata.txt \
+    --output-dir empress
+```
 
 # License
 q2-coordinates is released under a BSD-3-Clause license. See LICENSE for more details.

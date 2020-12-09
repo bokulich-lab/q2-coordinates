@@ -186,8 +186,12 @@ def create_tree_df(bins, index):
     # df formatting
     longest_lineages = pd.DataFrame(longest_lineages).set_index(index)
     longest_lineages.index.name = index
-
-    return skbio.TreeNode.from_taxonomy(taxonomy), longest_lineages
+    trees = skbio.TreeNode.from_taxonomy(taxonomy)
+    for node in trees.traverse():
+        if node.length is None:
+            node.length = 1.0
+    
+    return trees, longest_lineages
 
 
 def get_results(cleaned_df, threshold, index):
