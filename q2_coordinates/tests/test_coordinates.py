@@ -90,4 +90,3 @@ class TestSemanticTypes(CoordinatesTestPluginBase):
         exp = pd.Series(['38.306', '38.306', '38.306', '38.306'],
                         name='Latitude', index=exp_index)
         self.assertEqual(sorted(exp), sorted(obs_category.to_series()))
-
