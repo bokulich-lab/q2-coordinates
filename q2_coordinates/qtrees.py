@@ -196,7 +196,6 @@ def create_tree_df(bins, index):
     for node in trees.traverse():
         if node.length is None:
             node.length = 1.0
-    
     return trees, longest_lineages
 
 

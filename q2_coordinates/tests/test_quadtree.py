@@ -66,7 +66,7 @@ class BasicTest(unittest.TestCase):
         # set the correct tree
         self.correct_tree = skbio.TreeNode.read(
             StringIO(
-                "((('test_id_sw1':1.0)'3:1.0'," 
+                "((('test_id_sw1':1.0)'3:1.0',"
                 "('test_id_sw2':1.0)'1:1.0')'3.:1.0',"
                 "(('test_id_nw1':1.0)'1:1.0',"
                 "('test_id_nw2':1.0)'3:1.0')'1.:1.0',"
