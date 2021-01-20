@@ -193,7 +193,7 @@ def create_tree_df(bins, index):
     longest_lineages = pd.DataFrame(longest_lineages).set_index(index)
     longest_lineages.index.name = index
     trees = skbio.TreeNode.from_taxonomy(taxonomy)
-    
+
     # to allow plotting in q2-empress node lenght must be > 0,
     # so set arbitrary node length
     for node in trees.traverse():
