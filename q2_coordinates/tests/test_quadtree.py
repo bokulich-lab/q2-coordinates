@@ -66,10 +66,14 @@ class BasicTest(unittest.TestCase):
         # set the correct tree
         self.correct_tree = skbio.TreeNode.read(
             StringIO(
-                "((('test_id_sw1')'3', ('test_id_sw2')'1')'3.',"
-                "(('test_id_nw1')'1', ('test_id_nw2')'3')'1.',"
-                "(('test_id_se1')'4', ('test_id_se2')'2')'4.',"
-                "(('test_id_ne1')'2', ('test_id_ne2')'4')'2.')root;"))
+                "((('test_id_sw1':1.0)'3:1.0',"
+                "('test_id_sw2':1.0)'1:1.0')'3.:1.0',"
+                "(('test_id_nw1':1.0)'1:1.0',"
+                "('test_id_nw2':1.0)'3:1.0')'1.:1.0',"
+                "(('test_id_se1':1.0)'4:1.0',"
+                "('test_id_se2':1.0)'2:1.0')'4.:1.0',"
+                "(('test_id_ne1':1.0)'2:1.0',"
+                "('test_id_ne2':1.0)'4:1.0')'2.:1.0')root;"))
 
     # clean dataframe tests
     def test_clean_df(self):
