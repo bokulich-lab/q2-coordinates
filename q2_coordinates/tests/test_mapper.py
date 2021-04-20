@@ -27,17 +27,20 @@ class TestMapper(CoordinatesTestPluginBase):
         coordinates.actions.draw_map(
             metadata=self.sample_md.merge(self.alpha.view(qiime2.Metadata)),
             latitude='latitude', longitude='longitude',
-            column='observed_features')
+            column='observed_features', image='StamenTerrain',
+            color_palette='rainbow', discrete=False, missing_data='error')
 
     def test_draw_map_from_sample_metadata(self):
         coordinates.actions.draw_map(
             metadata=self.sample_md, latitude='latitude',
-            longitude='longitude', column='vineyard', discrete=True)
+            longitude='longitude', column='vineyard', discrete=True,
+            image='StamenTerrain', color_palette='rainbow',
+            missing_data='error')
 
     def test_geodesic_distance(self):
         dm, = coordinates.actions.geodesic_distance(
             metadata=self.sample_md, latitude='latitude',
-            longitude='longitude')
+            longitude='longitude', missing_data='error')
         exp = qiime2.Artifact.load(self.get_data_path(
             'geodesic_distance_matrix.qza')).view(DistanceMatrix)
         dm = dm.view(DistanceMatrix)
@@ -47,12 +50,14 @@ class TestMapper(CoordinatesTestPluginBase):
         coordinates.actions.draw_interactive_map(
             metadata=self.sample_md.merge(self.alpha.view(qiime2.Metadata)),
             latitude='latitude', longitude='longitude',
-            column='observed_features')
+            column='observed_features', discrete=False,
+            color_palette='rainbow', missing_data='error')
 
     def test_draw_interactive_map_from_sample_metadata(self):
         coordinates.actions.draw_interactive_map(
             metadata=self.sample_md, latitude='latitude',
-            longitude='longitude', column='vineyard', discrete=True)
+            longitude='longitude', column='vineyard', discrete=True,
+            color_palette='rainbow', missing_data='error')
 
 
 class TestCoordMethods(CoordinatesTestPluginBase):
@@ -64,7 +69,8 @@ class TestCoordMethods(CoordinatesTestPluginBase):
 
     def test_euclidean_distance_3d(self):
         dm, = coordinates.actions.euclidean_distance(
-            metadata=self.coord_md, x='x', y='y', z='z')
+            metadata=self.coord_md, x='x', y='y', z='z',
+            missing_data='error')
         dm = dm.view(DistanceMatrix).condensed_form()
         exp = np.array([1.30384048, 3.98998747, 4.26848919, 5.17010638,
                         5.62316637, 2.82488938, 3.02324329, 3.93319209,
@@ -74,7 +80,8 @@ class TestCoordMethods(CoordinatesTestPluginBase):
 
     def test_euclidean_distance_2d(self):
         dm, = coordinates.actions.euclidean_distance(
-            metadata=self.coord_md, x='x', y='y')
+            metadata=self.coord_md, x='x', y='y', z=None,
+            missing_data='error')
         dm = dm.view(DistanceMatrix).condensed_form()
         exp = np.array([1.30384048, 3.98497177, 4.25793377, 5.0039984,
                         5.51452627, 2.81780056, 3.00832179, 3.71214224,

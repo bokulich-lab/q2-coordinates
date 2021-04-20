@@ -36,14 +36,20 @@ class TestStats(CoordinatesTestPluginBase):
         coordinates.actions.autocorr(
             distance_matrix=self.dm,
             metadata=self.alpha,
-            intersect_ids=True)
+            intersect_ids=True,
+            permutations=999,
+            two_tailed=True,
+            transformation='R')
 
     def test_autocorr_nonintersecting_ids_warning(self):
         with self.assertRaisesRegex(ValueError, "matrix are missing"):
             coordinates.actions.autocorr(
                 distance_matrix=self.dm,
                 metadata=self.alpha,
-                intersect_ids=False)
+                intersect_ids=False,
+                permutations=999,
+                two_tailed=True,
+                transformation='R')
 
     def test_match_ids(self):
         md = pd.Series({'peanuts': [1, 2, 3, 4]})

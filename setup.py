@@ -10,7 +10,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='q2-coordinates',
-    version='2020.8.1.dev',
+    version='2021.2.0.dev',
     license='BSD-3-Clause',
     packages=find_packages(),
     author="Nicholas Bokulich",
