@@ -7,8 +7,6 @@ A qiime2 plugin supporting methods for geographic mapping of qiime2 artifact dat
 
 Quadtree functionality allows the user to objectively partition a dataset based on x and y coordinate information (for example, longitude and latitude).
 
-Quadtree functionality allows the user to objectively partition a dataset based on x and y coordinate information (for example, longitude and latitude).
-
 q2-coordinates makes it easy to plot geographic coordinates and associated (meta)data on beautiful topographic, street maps or interactive geographical maps.
 
 Map tiling, resolution calculation, and coordinate projection occur automatically. All the user needs to do is input a two-dimensional list of geocoordinates to plot, in decimal degrees, as shown in the examples below.
