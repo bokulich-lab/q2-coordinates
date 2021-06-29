@@ -23,14 +23,14 @@ requirements:
     - q2templates {{ release }}.*
     - q2-types {{ release }}.*
     - q2-diversity {{ release }}.*
-    - pysal
-    - cartopy
-    - matplotlib
-    - geopy
-    - dill
-    - geopandas
-    - pandana
-    - urbanaccess
+    - pysal==2.1.0
+    - cartopy==0.19
+    - matplotlib==3.4.2
+    - geopy==2.1.0
+    - dill==0.3.4
+    - geopandas==0.9.0
+    - pandana==0.6.1
+    - urbanaccess==0.2.2
 
 test:
   imports:
