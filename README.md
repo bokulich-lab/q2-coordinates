@@ -1,6 +1,7 @@
 # q2-coordinates
 
-[![Build Status](https://travis-ci.org/bokulich-lab/q2-coordinates.svg?branch=master)](https://travis-ci.org/bokulich-lab/q2-coordinates) [![Coverage Status](https://coveralls.io/repos/github/bokulich-lab/q2-coordinates/badge.svg?branch=master)](https://coveralls.io/github/bokulich-lab/q2-coordinates?branch=master) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2124295.svg)](https://doi.org/10.5281/zenodo.2124295)
+![CI](https://github.com/bokulich-lab/q2-coordinates/actions/workflows/main.yml/badge.svg)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2124295.svg)](https://doi.org/10.5281/zenodo.2124295)
 
 
 A qiime2 plugin supporting methods for geographic mapping of qiime2 artifact data or metadata. 
