@@ -19,19 +19,18 @@ requirements:
 
   run:
     - python {{ python }}
-    - biom-format
-    - pandas
-    - matplotlib=3.2
-    - scipy
-    - cartopy==0.16
-    - numpy
-    - geopy
-    - dill
-    - pysal==2.0
-    - scikit-bio
+    - qiime2 {{ release }}.*
     - q2templates {{ release }}.*
     - q2-types {{ release }}.*
-    - qiime2 {{ release }}.*
+    - q2-diversity {{ release }}.*
+    - pysal
+    - cartopy
+    - matplotlib
+    - geopy
+    - dill
+    - geopandas
+    - pandana
+    - urbanaccess
 
 test:
   imports:
