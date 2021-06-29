@@ -27,7 +27,7 @@ citations = Citations.load('citations.bib', package='q2_coordinates')
 plugin = Plugin(
     name='coordinates',
     version=q2_coordinates.__version__,
-    website="https://github.com/nbokulich/q2-coordinates",
+    website="https://github.com/bokulich-lab/q2-coordinates",
     package='q2_coordinates',
     description=(
         'This QIIME 2 plugin supports methods for geospatial analysis and map '
