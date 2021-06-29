@@ -21,18 +21,15 @@ We recommend using the functonalities in a conda environment with the required d
 conda create -y -n q2coord
 conda activate q2coord
 
-conda install \
-  -c conda-forge -c bioconda -c qiime2 -c defaults \
-  qiime2 q2cli q2templates q2-types q2-diversity scikit-bio "pysal==2.0" geopy numpy "cartopy==0.16" scipy \
-  "matplotlib=3.2" pandas biom-format dill
+conda install -y \
+  -c conda-forge -c bioconda -c qiime2 -c udst -c defaults \
+  qiime2 q2cli q2templates q2-types q2-diversity \
+  pysal cartopy matplotlib geopy dill geopandas \
+  pandana urbanaccess
 ```
 Now install q2-coordinates:
 ```
 pip install git+https://github.com/nbokulich/q2-coordinates.git
-```
-To avoid warnings about geopandas you can additionally install it as:
-```
-pip install geopandas
 ```
 
 # Examples
@@ -147,7 +144,7 @@ The quadtree function splits the region of points into bins recursively based on
 
 ```
 qiime coordinates quadtree \
-    --m-metadata-file q2_coordinates/tests/data/chardonnay_sample_metadata.txt \
+    --m-metadata-file chardonnay_sample_metadata.txt \
     --p-y-coord latitude \
     --p-x-coord longitude \
     --p-threshold 50 \
@@ -173,7 +170,7 @@ Quadtrees can easily be visualized using a mix of python and other existing qiim
 #### then using qiime2 cli
             qiime empress tree-plot \
             --i-tree test\new_tree.qza \
-            --m-feature-metadata-file q2_coordinates/tests/data/chardonnay_sample_metadata.txt \
+            --m-feature-metadata-file chardonnay_sample_metadata.txt \
             --output-dir empress
 
 # License
