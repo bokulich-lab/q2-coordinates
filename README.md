@@ -3,18 +3,12 @@
 ![CI](https://github.com/bokulich-lab/q2-coordinates/actions/workflows/main.yml/badge.svg)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2124295.svg)](https://doi.org/10.5281/zenodo.2124295)
 
-
 A qiime2 plugin supporting methods for geographic mapping of qiime2 artifact data or metadata. 
 
-Quadtree functionality allows the user to objectively partition a dataset based on x and y coordinate information (for example, longitude and latitude).
+q2-coordinates makes it easy to plot geographic coordinates and associated (meta)data on beautiful topographic, street maps or interactive geographical maps. Map tiling, resolution calculation, and coordinate projection occur automatically. All the user needs to do is input a two-dimensional list of geocoordinates to plot, in decimal degrees, as shown in the examples below.
 
-q2-coordinates makes it easy to plot geographic coordinates and associated (meta)data on beautiful topographic, street maps or interactive geographical maps.
-
-Map tiling, resolution calculation, and coordinate projection occur automatically. All the user needs to do is input a two-dimensional list of geocoordinates to plot, in decimal degrees, as shown in the examples below.
-
-Currently, StamenTerrain, Open Street Maps, Google Maps and OpenLayers are supported, producing high-quality maps from anywhere on planet Earth.
-
-Map projections are quick for small maps, but may take several minutes for very large maps (e.g., trans-continental).
+Currently, StamenTerrain, Open Street Maps, Google Maps and OpenLayers are supported, producing high-quality maps from anywhere on planet Earth. Map projections are quick for small maps, but may take several minutes for very large maps (e.g., trans-continental).
+Additionally, quadtree functionality allows the user to objectively partition a dataset based on x and y coordinate information (for example, longitude and latitude).
 
 # Install
 We recommend using the functonalities in a conda environment with the required dependencies installed within:
