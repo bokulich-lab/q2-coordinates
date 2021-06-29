@@ -1,6 +1,6 @@
 # q2-coordinates
 
-[![Build Status](https://travis-ci.org/nbokulich/q2-coordinates.svg?branch=master)](https://travis-ci.org/nbokulich/q2-coordinates) [![Coverage Status](https://coveralls.io/repos/github/nbokulich/q2-coordinates/badge.svg?branch=master)](https://coveralls.io/github/nbokulich/q2-coordinates?branch=master) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2124295.svg)](https://doi.org/10.5281/zenodo.2124295)
+[![Build Status](https://travis-ci.org/bokulich-lab/q2-coordinates.svg?branch=master)](https://travis-ci.org/bokulich-lab/q2-coordinates) [![Coverage Status](https://coveralls.io/repos/github/bokulich-lab/q2-coordinates/badge.svg?branch=master)](https://coveralls.io/github/bokulich-lab/q2-coordinates?branch=master) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2124295.svg)](https://doi.org/10.5281/zenodo.2124295)
 
 
 A qiime2 plugin supporting methods for geographic mapping of qiime2 artifact data or metadata. 
@@ -29,7 +29,7 @@ conda install -y \
 ```
 Now install q2-coordinates:
 ```
-pip install git+https://github.com/nbokulich/q2-coordinates.git
+pip install git+https://github.com/bokulich-lab/q2-coordinates.git
 ```
 
 # Examples
@@ -40,7 +40,7 @@ This visualizer takes a SampleData[AlphaDiversity] artifact and sample metadata 
 
 Clone into repository and get access to the test data:
 ```
-git clone https://github.com/nbokulich/q2-coordinates.git
+git clone https://github.com/bokulich-lab/q2-coordinates.git
 
 cd q2-coordinates/q2_coordinates/tests/data/
 ```

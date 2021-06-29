@@ -38,6 +38,6 @@ test:
     - qiime2.plugins.coordinates
 
 about:
-  home: https://github.com/nbokulich/q2-coordinates
+  home: https://github.com/bokulich-lab/q2-coordinates
   license: BSD-3-Clause
   license_family: BSD

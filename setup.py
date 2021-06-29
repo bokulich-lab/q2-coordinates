@@ -17,7 +17,7 @@ setup(
     author_email="nbokulich@gmail.com",
     description=("Methods for geographic mapping of qiime2 artifact data or"
                  "metadata."),
-    url="https://github.com/nbokulich/q2-coordinates",
+    url="https://github.com/bokulich-lab/q2-coordinates",
     entry_points={
         'qiime2.plugins':
         ['q2-coordinates=q2_coordinates.plugin_setup:plugin']
