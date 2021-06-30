@@ -19,7 +19,7 @@ conda activate q2coord
 conda install -y \
   -c conda-forge -c bioconda -c qiime2 -c udst -c defaults \
   qiime2 q2cli q2templates q2-types q2-diversity \
-  pysal cartopy matplotlib geopy dill geopandas \
+  pysal==2.1.0 cartopy==0.19 matplotlib geopy dill geopandas \
   pandana urbanaccess
 
 pip install git+https://github.com/bokulich-lab/q2-coordinates.git
