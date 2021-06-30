@@ -9,7 +9,7 @@
 
 import matplotlib.pyplot as plt
 import qiime2
-from pysal.explore.esda import geary, moran
+from esda import geary, moran
 from pysal.lib import weights as psw
 import pandas as pd
 from skbio import DistanceMatrix

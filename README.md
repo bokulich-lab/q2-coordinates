@@ -21,11 +21,12 @@ conda install -y \
   qiime2 q2cli q2templates q2-types q2-diversity \
   pysal cartopy matplotlib geopy dill geopandas \
   pandana urbanaccess
-```
-Now install q2-coordinates:
-```
+
 pip install git+https://github.com/bokulich-lab/q2-coordinates.git
 ```
+
+For developers until QIIME 2 2021.8 is officially released, replace `-c qiime2` in the command above with `-c https://packages.qiime2.org/qiime2/2021.8/staged` to fetch the latest dev version instead.
+
 
 # Examples
 In the examples below we will use some bacterial 16S rRNA gene amplicon sequence data collected from Californian vineyards, as described by [Bokulich et al. 2016](https://doi.org/10.1128/mBio.00631-16). 😎🍷

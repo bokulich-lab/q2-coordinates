@@ -23,11 +23,11 @@ requirements:
     - pandas
     - matplotlib
     - scipy
-    - cartopy==0.19
+    - cartopy
     - numpy
     - geopy
     - dill
-    - pysal==2.1.0
+    - pysal
     - scikit-bio
     - pandana 
     - urbanaccess
