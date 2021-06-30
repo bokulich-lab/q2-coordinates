@@ -28,6 +28,7 @@ requirements:
     - geopy
     - dill
     - pysal
+    - esda
     - scikit-bio
     - pandana 
     - urbanaccess
