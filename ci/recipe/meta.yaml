@@ -21,14 +21,13 @@ requirements:
     - python {{ python }}
     - biom-format
     - pandas
-    - matplotlib
+    - matplotlib==3.2
     - scipy
-    - cartopy
+    - cartopy==0.16
     - numpy
     - geopy
     - dill
-    - pysal
-    - esda
+    - pysal==2.0
     - scikit-bio
     - pandana 
     - urbanaccess
