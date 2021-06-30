@@ -29,6 +29,8 @@ requirements:
     - dill
     - pysal==2.1.0
     - scikit-bio
+    - pandana 
+    - urbanaccess
     - q2templates {{ release }}.*
     - q2-types {{ release }}.*
     - qiime2 {{ release }}.*
