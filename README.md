@@ -141,63 +141,33 @@ qiime coordinates quadtree \
     --p-y-coord latitude \
     --p-x-coord longitude \
     --p-threshold 20 \
-    --output-dir test
+    --output-dir test_quadtree
 ```
 
 ### Visualizing quadtrees
-Quadtrees can easily be integrated into downstream analyses with q2-coordinates and other QIIME 2 plugins, and visualized using other qiime2 plugins (e.g., q2-empress). Some ideas include:
-1. using q2-coordinates draw-map or draw-interactive-map to display the sample positions and color code them by respective quadrant.
-using qiime2 cli
-```
-qiime tools export --input-path test/output_tree.qza --output-path test
-```
-in python (this is to simply add longitude and latitude to inform the location of bins on a map)
-```
-import biom
-import pandas as pd
-import numpy as np 
-import skbio
+Quadtrees (of qiime2 type `SampleData[QuadTree]`) can easily be integrated into downstream analyses with q2-coordinates and other QIIME 2 plugins, and visualized using other qiime2 plugins (e.g., q2-empress). 
 
-df= pd.read_csv('test/quadtree.tsv', sep="\t", index_col=0)
-
-md = pd.read_csv("chardonnay_sample_metadata.txt", sep="\t", low_memory=False, index_col=0)
-
-md = md[['latitude', 'longitude']]
-
-x_coord = 'longitude'
-y_coord = 'latitude'
-
-md[y_coord] = pd.to_numeric(md[y_coord], errors='coerce')
-md[x_coord] = pd.to_numeric(md[x_coord], errors='coerce')
-md = md.dropna(subset=[x_coord, y_coord])
-
-df['split-depth-1'].apply(str)
-df['split-depth-2'].apply(str)
-
-joined = df.join(md)
-
-joined.to_csv("qtrees.csv", sep="\t", index=True)
-```
-and then once again in qiime2 cli
+1. To display the sample positions and color-code them by respective quadrant with a split-depth of `1` you can use q2-coordinates `draw-map` (or `draw-interactive-map`) as:
 ```
 qiime coordinates draw-map \
-    --m-metadata-file qtrees.csv \
-    --p-column split-depth-1 \
+    --m-metadata-file test_quadtree/output_table.qza \
+    --m-metadata-file chardonnay_sample_metadata.txt \
     --p-latitude latitude \
     --p-longitude longitude \
+    --p-column split-depth-1 \
     --p-discrete \
-    --o-visualization quadtree-map-depth1.qzv
+    --o-visualization test_quadtree/quadtree-map-depth1.qzv
 ```
+![Alt text](./examples/quadtree-example.jpg?raw=true "coordinates colored by observed species")
 
-2. using q2-empress to view and navigate the tree to see number and size of splits. This requires the installation of the qiime2 empress plugin: https://github.com/biocore/empress.
 
-using qiime2 cli
+2. To view and navigate the quadtree use q2-empress that allows you to see the number and size of splits. Beware, that you should have the qiime2 empress plugin installed as described [here](https://github.com/biocore/empress).
 
 ```
     qiime empress tree-plot \
-    --i-tree test/output_tree.qza \
+    --i-tree test_quadtree/output_tree.qza \
     --m-feature-metadata-file chardonnay_sample_metadata.txt \
-    --output-dir empress
+    --output-dir test_quadtree/empress
 ```
 
 # License
