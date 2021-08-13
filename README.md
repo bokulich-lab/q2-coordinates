@@ -11,7 +11,7 @@ Currently, StamenTerrain, Open Street Maps, Google Maps and OpenLayers are suppo
 Additionally, quadtree functionality allows the user to objectively partition a dataset based on x and y coordinate information (for example, longitude and latitude).
 
 # Install
-We recommend using the functonalities in a conda environment with the required dependencies installed within:
+We recommend using the functionalities in a conda environment with the required dependencies installed within:
 ```
 conda create -y -n q2coord
 conda activate q2coord
@@ -24,6 +24,10 @@ conda install -y \
 
 pip install git+https://github.com/bokulich-lab/q2-coordinates.git
 ```
+
+DEV-only note:
+
+Until QIIME 2 2021.8 is officially released, replace `-c qiime2` in the command above with `-c https://packages.qiime2.org/qiime2/2021.8/staged` to fetch the latest dev version instead.
 
 # Examples
 In the examples below we will use some bacterial 16S rRNA gene amplicon sequence data collected from Californian vineyards, as described by [Bokulich et al. 2016](https://doi.org/10.1128/mBio.00631-16). 😎🍷
