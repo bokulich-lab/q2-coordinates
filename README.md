@@ -162,7 +162,7 @@ qiime coordinates draw-map \
     --p-discrete \
     --o-visualization test_quadtree/quadtree-map-depth1.qzv
 ```
-![Alt text](./examples/quadtree-example.jpg?raw=true "coordinates colored by observed species")
+![Alt text](./examples/quadtree-example.jpg?raw=true "coordinates colored by quadtree quadrant")
 
 
 2. To view and navigate the quadtree use q2-empress that allows you to see the number and size of splits. Beware, that you should have the qiime2 empress plugin installed as described [here](https://github.com/biocore/empress).
