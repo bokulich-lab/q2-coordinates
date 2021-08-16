@@ -19,18 +19,17 @@ requirements:
 
   run:
     - python {{ python }}
-    - biom-format
-    - pandas
-    - matplotlib=3.2
-    - scipy
-    - cartopy==0.16
-    - numpy
-    - geopy
+    - tzlocal==2.1
+    - urbanaccess
+    - pandana
+    - geopandas
     - dill
-    - pysal==2.0
-    - scikit-bio
-    - q2templates {{ release }}.*
+    - geopy
+    - matplotlib
+    - cartopy==0.19
+    - pysal==2.1.0
     - q2-types {{ release }}.*
+    - q2templates {{ release }}.*
     - qiime2 {{ release }}.*
 
 test:
@@ -39,6 +38,6 @@ test:
     - qiime2.plugins.coordinates
 
 about:
-  home: https://github.com/nbokulich/q2-coordinates
+  home: https://github.com/bokulich-lab/q2-coordinates
   license: BSD-3-Clause
   license_family: BSD
