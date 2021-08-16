@@ -18,6 +18,7 @@ requirements:
 
   run:
     - python {{ python }}
+    - backports
     - urbanaccess
     - pandana
     - geopandas
