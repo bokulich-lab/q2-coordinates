@@ -20,7 +20,7 @@ conda install -y \
   -c conda-forge -c bioconda -c qiime2 -c udst -c defaults \
   qiime2 q2cli q2templates q2-types q2-diversity \
   pysal==2.1.0 cartopy==0.19 matplotlib geopy dill geopandas \
-  pandana urbanaccess
+  pandana urbanaccess tzlocal==2.1
 
 pip install git+https://github.com/bokulich-lab/q2-coordinates.git
 ```
@@ -165,7 +165,7 @@ qiime coordinates draw-map \
 ![Alt text](./examples/quadtree-example.jpg?raw=true "coordinates colored by quadtree quadrant")
 
 
-2. To view and navigate the quadtree use q2-empress that allows you to see the number and size of splits. Beware, that you should have the qiime2 empress plugin installed as described [here](https://github.com/biocore/empress).
+2. To view and navigate the quadtree use q2-empress that allows you to see the number and size of splits. Beware, that you should have the qiime2 empress plugin installed as described [here](https://github.com/biocore/empress#qiime-2-version).
 
 ```
     qiime empress tree-plot \
