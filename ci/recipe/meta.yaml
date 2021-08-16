@@ -1,6 +1,5 @@
 {% set data = load_setup_py_data() %}
 {% set version = data.get('version') or 'placehold' %}
-{% set release = '.'.join(version.split('.')[:2]) %}
 
 package:
   name: q2-coordinates
@@ -19,21 +18,17 @@ requirements:
 
   run:
     - python {{ python }}
-    - biom-format
-    - pandas
-    - matplotlib
-    - scipy
-    - cartopy==0.19
-    - numpy
-    - geopy
-    - dill
-    - pysal==2.1.0
-    - scikit-bio
-    - pandana 
     - urbanaccess
-    - q2templates {{ release }}.*
-    - q2-types {{ release }}.*
-    - qiime2 {{ release }}.*
+    - pandana
+    - geopandas
+    - dill
+    - geopy
+    - matplotlib
+    - cartopy==0.19
+    - pysal==2.1.0
+    - q2-types {{ version }}.*
+    - q2templates {{ version }}.*
+    - qiime2 {{ version }}.*
 
 test:
   imports:
