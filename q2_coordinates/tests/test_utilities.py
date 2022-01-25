@@ -5,10 +5,10 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
+
 import unittest
 
 import pandas as pd
-import qiime2
 
 from q2_coordinates._utilities import get_max_extent
 
