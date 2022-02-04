@@ -32,7 +32,7 @@ jobs:
         # necessary for versioneer
         fetch-depth: 0
     # TODO: update this to @v1 when it lands
-    - uses: qiime2/action-library-packaging@alpha2
+    - uses: qiime2/action-library-packaging@alpha1
       with:
         package-name: q2-coordinates
         additional-tests: pytest --pyargs q2_coordinates
