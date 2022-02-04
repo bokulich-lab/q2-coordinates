@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# Copyright (c) 2020-2021, QIIME 2 development team.
+# Copyright (c) 2022, QIIME 2 development team.
 #
 # Distributed under the terms of the Modified BSD License.
 #
@@ -67,11 +67,11 @@ def get_map_params(image='StamenTerrain', color_palette=None):
 
 
 def get_max_extent(latitude, longitude):
-    lat_0 = latitude.min() - latitude.std()
-    lat_1 = latitude.max() + latitude.std()
-    lon_0 = longitude.min() - longitude.std()
-    lon_1 = longitude.max() + longitude.std()
-    return lat_0, lat_1, lon_0, lon_1
+    lat_0 = latitude.min() - 0.15*latitude.std()
+    lat_1 = latitude.max() + 0.15*latitude.std()
+    lon_0 = longitude.min() - 0.15*longitude.std()
+    lon_1 = longitude.max() + 0.15*longitude.std()
+    return max(lat_0, -90), min(lat_1, 90), max(lon_0, -180), min(lon_1, 180)
 
 
 def plot_basemap(latitude, longitude, image, color_palette=None):
